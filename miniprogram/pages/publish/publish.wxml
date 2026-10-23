@@ -1,0 +1,109 @@
+<view class="page container">
+
+  <view class="sec"><view class="sec-bar"></view><view class="sec-txt">活动封面</view></view>
+  <view class="card">
+    <view class="cover-box" wx:if="{{cover}}">
+      <image class="cover-img" src="{{cover}}" mode="aspectFill" />
+      <view class="cover-remove" bindtap="onRemoveCover">
+        <image class="cover-remove-icon" src="/images/icons/close_w.png" />
+      </view>
+      <view class="cover-badge">
+        <image class="icon-sm" src="/images/icons/check_p.png" />
+        <text>已存云存储</text>
+      </view>
+    </view>
+    <view wx:else class="cover-add" bindtap="onPickCover" hover-class="menu-press">
+      <image class="cover-add-icon" src="/images/icons/image_p.png" />
+      <view class="t-sub">上传活动封面</view>
+      <view class="t-hint">建议 3:2 横图，将存储到微信云存储</view>
+    </view>
+  </view>
+
+  <view class="sec"><view class="sec-bar"></view><view class="sec-txt">基本信息</view></view>
+  <view class="form-card">
+    <view class="form-item">
+      <view class="form-label"><text>标题</text><text class="req">*</text></view>
+      <input class="form-input" placeholder="如：主论坛 · 人工智能专场" placeholder-class="form-input-ph"
+             value="{{f.title}}" data-key="title" bindinput="onInput" />
+    </view>
+    <view class="form-item">
+      <view class="form-label"><text>副标题</text></view>
+      <input class="form-input" placeholder="选填" placeholder-class="form-input-ph"
+             value="{{f.subtitle}}" data-key="subtitle" bindinput="onInput" />
+    </view>
+    <view class="form-item">
+      <view class="form-label"><text>开始时间</text><text class="req">*</text></view>
+      <picker mode="date" value="{{f.date}}" data-key="date" bindchange="onInput">
+        <view class="form-picker {{f.date ? '' : 'ph'}}">{{f.date || '日期'}}</view>
+      </picker>
+      <picker mode="time" value="{{f.time}}" data-key="time" bindchange="onInput">
+        <view class="form-picker {{f.time ? '' : 'ph'}}">{{f.time || '时间'}}</view>
+      </picker>
+    </view>
+    <view class="form-item">
+      <view class="form-label"><text>结束时间</text><text class="req">*</text></view>
+      <picker mode="date" value="{{f.endDate}}" data-key="endDate" bindchange="onInput">
+        <view class="form-picker {{f.endDate ? '' : 'ph'}}">{{f.endDate || '日期'}}</view>
+      </picker>
+      <picker mode="time" value="{{f.endTime}}" data-key="endTime" bindchange="onInput">
+        <view class="form-picker {{f.endTime ? '' : 'ph'}}">{{f.endTime || '时间'}}</view>
+      </picker>
+    </view>
+    <view class="form-item">
+      <view class="form-label"><text>形式</text></view>
+      <picker range="{{modes}}" value="{{modeIndex}}" bindchange="onMode">
+        <view class="form-picker">{{modes[modeIndex]}}</view>
+      </picker>
+      <image class="form-arrow" src="/images/icons/chevron-down_s.png" />
+    </view>
+    <view class="form-item">
+      <view class="form-label"><text>城市</text><text class="req">*</text></view>
+      <input class="form-input" placeholder="如：上海" placeholder-class="form-input-ph"
+             value="{{f.city}}" data-key="city" bindinput="onInput" />
+    </view>
+    <view class="form-item">
+      <view class="form-label"><text>场馆</text><text class="req">*</text></view>
+      <input class="form-input" placeholder="如：上海国际会议中心" placeholder-class="form-input-ph"
+             value="{{f.venue}}" data-key="venue" bindinput="onInput" />
+    </view>
+    <view class="form-item">
+      <view class="form-label"><text>详细地址</text></view>
+      <input class="form-input" placeholder="选填" placeholder-class="form-input-ph"
+             value="{{f.address}}" data-key="address" bindinput="onInput" />
+    </view>
+    <view class="form-item">
+      <view class="form-label"><text>名额上限</text><text class="req">*</text></view>
+      <input class="form-input" type="number" placeholder="如：300" placeholder-class="form-input-ph"
+             value="{{f.quota}}" data-key="quota" bindinput="onInput" />
+    </view>
+    <view class="form-item">
+      <view class="form-label"><text>费用(元)</text></view>
+      <input class="form-input" type="digit" placeholder="留空表示免费" placeholder-class="form-input-ph"
+             value="{{f.fee}}" data-key="fee" bindinput="onInput" />
+    </view>
+    <view class="form-item">
+      <view class="form-label"><text>标签</text></view>
+      <input class="form-input" placeholder="逗号分隔，如：峰会,主论坛" placeholder-class="form-input-ph"
+             value="{{f.tags}}" data-key="tags" bindinput="onInput" />
+    </view>
+  </view>
+
+  <view class="sec"><view class="sec-bar"></view><view class="sec-txt">活动亮点</view></view>
+  <view class="card">
+    <textarea class="ta" placeholder="介绍活动亮点、面向人群、参会收获等" placeholder-class="form-input-ph"
+              maxlength="500" value="{{f.desc}}" data-key="desc" bindinput="onInput" />
+  </view>
+
+  <view class="sec"><view class="sec-bar"></view><view class="sec-txt">会议议程</view></view>
+  <view class="card">
+    <textarea class="ta ta-sm" placeholder="每行一条，格式：09:30|开场致辞|主办方致辞&#10;10:00|主旨演讲|大模型技术趋势" placeholder-class="form-input-ph"
+              maxlength="1000" value="{{f.agenda}}" data-key="agenda" bindinput="onInput" />
+    <view class="t-hint mt8">每行一条，用「|」分隔：时间 | 标题 | 简介（简介可省略）</view>
+  </view>
+
+  <button class="btn btn-primary btn-block submit {{submitting ? 'disabled' : ''}}" bindtap="onSubmit">
+    {{submitting ? '发布中…' : '发布活动'}}
+  </button>
+
+  <view class="t-hint foot-note">发布后将立即出现在活动首页，学子可在线报名</view>
+</view>

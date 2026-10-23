@@ -1,0 +1,45 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/detail/detail",
+    "pages/enroll/enroll",
+    "pages/records/records",
+    "pages/mine/mine",
+    "pages/publish/publish"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#F4F6FA",
+    "navigationBarTitleText": "青年科创峰会",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F4F6FA",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#9AA4B8",
+    "selectedColor": "#2456E8",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tabbar/home.png",
+        "selectedIconPath": "images/tabbar/home_on.png"
+      },
+      {
+        "pagePath": "pages/records/records",
+        "text": "报名记录",
+        "iconPath": "images/tabbar/clipboard.png",
+        "selectedIconPath": "images/tabbar/clipboard_on.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "images/tabbar/user.png",
+        "selectedIconPath": "images/tabbar/user_on.png"
+      }
+    ]
+  },
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

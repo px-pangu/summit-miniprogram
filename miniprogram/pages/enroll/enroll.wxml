@@ -1,0 +1,140 @@
+<!-- ================= 报名成功 ================= -->
+<view class="page success-page" wx:if="{{success}}">
+  <view class="container">
+    <view class="card success-card">
+      <view class="success-ring">
+        <image class="success-check" src="/images/icons/check_w.png" />
+      </view>
+      <view class="success-title">报名提交成功</view>
+      <view class="t-sub">请等待主办方审核，结果将在「报名记录」中更新</view>
+
+      <view class="success-info">
+        <view class="si-row">
+          <text class="si-lab">活动名称</text>
+          <text class="si-val">{{a.title}}</text>
+        </view>
+        <view class="si-row">
+          <text class="si-lab">报名编号</text>
+          <text class="si-val si-strong">{{success.regNo}}</text>
+        </view>
+        <view class="si-row">
+          <text class="si-lab">签到码</text>
+          <text class="si-val si-strong si-code">{{success.checkCode}}</text>
+        </view>
+        <view class="si-row">
+          <text class="si-lab">当前状态</text>
+          <text class="si-val"><text class="tag tag-a">待审核</text></text>
+        </view>
+      </view>
+
+      <button class="btn btn-primary btn-block mt32" bindtap="goRecords">查看报名记录</button>
+      <button class="btn btn-outline btn-block mt16" bindtap="backHome">返回首页</button>
+    </view>
+  </view>
+</view>
+
+<!-- ================= 报名表单 ================= -->
+<view class="page" wx:elif="{{a}}">
+  <!-- 活动摘要 -->
+  <view class="summit-bar">
+    <view class="summit-bar-name">{{a.title}}</view>
+    <view class="summit-bar-meta">
+      <image class="icon-sm" src="/images/icons/clock_w.png" />
+      <text>{{a.startAtText}}</text>
+      <text class="summit-bar-div">|</text>
+      <image class="icon-sm" src="/images/icons/location_w.png" />
+      <text>{{a.city}}</text>
+    </view>
+  </view>
+
+  <view class="container">
+    <view class="sec"><view class="sec-bar"></view><view class="sec-txt">报名信息</view></view>
+
+    <view class="form-card">
+      <view class="form-item">
+        <view class="form-label"><image class="icon-sm" src="/images/icons/user_s.png" /><text>姓名</text><text class="req">*</text></view>
+        <input class="form-input" placeholder="请输入真实姓名" placeholder-class="form-input-ph"
+               value="{{form.name}}" data-key="name" bindinput="onInput" />
+      </view>
+
+      <view class="form-item">
+        <view class="form-label"><image class="icon-sm" src="/images/icons/phone_s.png" /><text>手机号</text><text class="req">*</text></view>
+        <input class="form-input" type="number" maxlength="11" placeholder="用于接收审核通知" placeholder-class="form-input-ph"
+               value="{{form.phone}}" data-key="phone" bindinput="onInput" />
+      </view>
+
+      <view class="form-item">
+        <view class="form-label"><image class="icon-sm" src="/images/icons/school_s.png" /><text>学校</text><text class="req">*</text></view>
+        <input class="form-input" placeholder="请输入所在学校" placeholder-class="form-input-ph"
+               value="{{form.school}}" data-key="school" bindinput="onInput" />
+      </view>
+
+      <view class="form-item">
+        <view class="form-label"><image class="icon-sm" src="/images/icons/note_s.png" /><text>学院/专业</text><text class="req">*</text></view>
+        <input class="form-input" placeholder="如：计算机科学与技术" placeholder-class="form-input-ph"
+               value="{{form.major}}" data-key="major" bindinput="onInput" />
+      </view>
+
+      <view class="form-item">
+        <view class="form-label"><image class="icon-sm" src="/images/icons/cap_s.png" /><text>学历</text><text class="req">*</text></view>
+        <picker range="{{degrees}}" value="{{degreeIndex}}" bindchange="onDegree">
+          <view class="form-picker {{degreeIndex < 0 ? 'ph' : ''}}">
+            {{degreeIndex < 0 ? '请选择' : degrees[degreeIndex]}}
+          </view>
+        </picker>
+        <image class="form-arrow" src="/images/icons/chevron-down_s.png" />
+      </view>
+
+      <view class="form-item">
+        <view class="form-label"><image class="icon-sm" src="/images/icons/mail_s.png" /><text>邮箱</text></view>
+        <input class="form-input" placeholder="选填，用于接收参会材料" placeholder-class="form-input-ph"
+               value="{{form.email}}" data-key="email" bindinput="onInput" />
+      </view>
+    </view>
+
+    <view class="sec"><view class="sec-bar"></view><view class="sec-txt">参会方向</view></view>
+    <view class="card">
+      <view class="chips">
+        <view wx:for="{{directions}}" wx:key="*this"
+              class="chip {{direction === item ? 'chip-on' : ''}}"
+              data-d="{{item}}" bindtap="onDirection">{{item}}</view>
+      </view>
+
+      <view class="hotel-row">
+        <view class="hotel-lab">
+          <image class="icon-sm" src="/images/icons/location_s.png" />
+          <text>需要会务协助安排住宿</text>
+        </view>
+        <switch checked="{{needHotel}}" color="#2456E8" bindchange="onHotel" />
+      </view>
+    </view>
+
+    <view class="sec"><view class="sec-bar"></view><view class="sec-txt">备注</view></view>
+    <view class="card">
+      <textarea class="remark" placeholder="选填，如需携带随行人员、饮食禁忌等可在此说明"
+                placeholder-class="form-input-ph" maxlength="200"
+                value="{{form.remark}}" data-key="remark" bindinput="onInput" />
+      <view class="t-hint remark-count">{{form.remark.length}}/200</view>
+    </view>
+
+    <!-- 同意须知 + 提交 -->
+    <view class="agree" bindtap="onAgree">
+      <view class="agree-box {{agreed ? 'agree-on' : ''}}">
+        <image wx:if="{{agreed}}" class="agree-check" src="/images/icons/check_w.png" />
+      </view>
+      <text>我已阅读并同意<text class="agree-link">《活动报名须知》</text></text>
+    </view>
+
+    <view class="footer-gap"></view>
+  </view>
+
+  <view class="footer-bar">
+    <view class="footer-price">
+      <view class="num">{{a.fee ? '¥' + a.fee : '免费'}}</view>
+      <view class="lab">报名费用</view>
+    </view>
+    <button class="btn btn-primary footer-btn {{submitting ? 'disabled' : ''}}" bindtap="onSubmit">
+      {{submitting ? '提交中…' : '提交报名'}}
+    </button>
+  </view>
+</view>

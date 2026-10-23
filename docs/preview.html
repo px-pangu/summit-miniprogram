@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 青年科创峰会 · 小程序界面预览</title>
+<style>
+  :root {
+    --primary: #2456E8;
+    --primary-deep: #1B3FD6;
+    --ink: #0F172A;
+    --ink2: #475569;
+    --ink3: #94A3B8;
+    --bg: #F4F6FA;
+    --line: #EDF0F5;
+    --green: #16A34A;
+    --green-soft: #E8F7EE;
+    --amber: #B45309;
+    --amber-soft: #FEF3E2;
+    --grad: linear-gradient(135deg, #2E6BF6 0%, #1B3FD6 58%, #122B85 100%);
+    --shadow: 0 6px 18px rgba(15,23,42,.06);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: #E9EDF4;
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: var(--ink);
+    padding: 48px 32px 72px;
+  }
+  .head { text-align:center; margin-bottom: 40px; }
+  .head h1 { font-size: 26px; letter-spacing: 1px; }
+  .head p { color: var(--ink3); font-size: 14px; margin-top: 8px; }
+  .stage { display:flex; flex-wrap:wrap; gap:40px; justify-content:center; }
+
+  .phone-wrap { text-align:center; }
+  .phone-label { font-size:14px; font-weight:600; color:var(--ink2); margin-bottom:12px; }
+  .phone {
+    width: 328px; height: 700px;
+    background: var(--bg);
+    border-radius: 40px;
+    border: 8px solid #0F172A;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 24px 60px rgba(15,23,42,.22);
+    text-align: left;
+    flex-shrink: 0;
+  }
+  .notch {
+    position:absolute; top:0; left:50%; transform:translateX(-50%);
+    width:120px; height:22px; background:#0F172A; border-radius:0 0 14px 14px; z-index:9;
+  }
+  .screen { height:100%; overflow:hidden; display:flex; flex-direction:column; }
+  .scroll { flex:1; overflow:hidden; }
+  .scroll::after { content:''; display:block; height:8px; }
+
+  .card { background:#fff; border-radius:12px; box-shadow:var(--shadow); }
+  .tag { display:inline-flex; align-items:center; padding:2px 9px; border-radius:999px; font-size:10px; font-weight:500; }
+  .tag-p { background:#EBF0FE; color:var(--primary); }
+  .tag-g { background:var(--green-soft); color:var(--green); }
+  .tag-a { background:var(--amber-soft); color:var(--amber); }
+  .tag-n { background:#F1F4F9; color:var(--ink3); }
+  .ic { width:14px; height:14px; flex:none; }
+  .ic-s { width:12px; height:12px; flex:none; }
+  .meta { display:flex; align-items:center; gap:6px; color:var(--ink2); font-size:11px; }
+  .progress { height:5px; background:#EAEFF8; border-radius:999px; overflow:hidden; flex:1; }
+  .progress i { display:block; height:100%; border-radius:999px; background:linear-gradient(90deg,#4F82F5,var(--primary)); }
+
+  /* tab bar */
+  .tabbar { display:flex; background:#fff; padding:8px 10px 16px; box-shadow:0 -4px 14px rgba(15,23,42,.05); }
+  .tab-i { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; font-size:9.5px; color:#9AA4B8; }
+  .tab-i.on { color:var(--primary); font-weight:600; }
+  .tab-i .ic { width:20px; height:20px; }
+
+  .footer-bar {
+    position:absolute; left:0; right:0; bottom:0;
+    background:rgba(255,255,255,.97); backdrop-filter:blur(8px);
+    padding:10px 16px 18px; display:flex; align-items:center; gap:12px;
+    box-shadow:0 -4px 14px rgba(15,23,42,.06);
+  }
+  .f-price .n { font-size:18px; font-weight:700; color:var(--primary); line-height:1.1; }
+  .f-price .l { font-size:9px; color:var(--ink3); }
+  .btn { flex:1; display:flex; align-items:center; justify-content:center; height:38px; border-radius:999px; background:var(--primary); color:#fff; font-size:13.5px; font-weight:600; box-shadow:0 6px 14px rgba(36,86,232,.3); }
+
+  .sec { display:flex; align-items:center; gap:7px; margin:14px 2px 9px; font-weight:600; font-size:13px; }
+  .sec::before { content:''; width:3.5px; height:13px; border-radius:2px; background:var(--primary); }
+
+  /* ============ 首页 ============ */
+  .hero { background:var(--grad); padding:38px 18px 64px; color:#fff; position:relative; }
+  .hero-badge { width:32px; height:32px; border-radius:9px; background:rgba(255,255,255,.16); display:flex; align-items:center; justify-content:center; margin-bottom:10px; }
+  .hero-en { font-size:8.5px; letter-spacing:2px; color:rgba(255,255,255,.62); }
+  .hero-name { font-size:21px; font-weight:700; letter-spacing:1px; margin-top:4px; }
+  .hero-slogan { font-size:10.5px; color:rgba(255,255,255,.78); margin-top:5px; }
+  .hero-meta { display:flex; gap:14px; margin-top:12px; font-size:9.5px; color:rgba(255,255,255,.88); }
+  .hero-meta span { display:flex; align-items:center; gap:4px; }
+  .hero-stats { position:absolute; left:16px; right:16px; bottom:-26px; background:#fff; border-radius:12px; box-shadow:0 8px 22px rgba(18,43,133,.16); display:flex; padding:10px 0; text-align:center; }
+  .hs { flex:1; }
+  .hs b { font-size:16px; display:block; }
+  .hs span { font-size:9px; color:var(--ink3); }
+  .hs-div { width:1px; background:var(--line); margin:6px 0; }
+
+  .search { margin:38px 14px 0; display:flex; align-items:center; gap:8px; padding:9px 13px; font-size:11px; color:#B6BECD; }
+  .tabs { display:flex; gap:8px; margin:14px 14px 10px; }
+  .tab-c { padding:5px 13px; border-radius:999px; background:#fff; font-size:10.5px; color:var(--ink2); box-shadow:var(--shadow); }
+  .tab-c.on { background:var(--primary); color:#fff; font-weight:600; box-shadow:0 5px 12px rgba(36,86,232,.3); }
+
+  .act { display:flex; gap:10px; padding:10px; margin:0 14px 12px; position:relative; }
+  .act-cv { width:82px; height:82px; border-radius:9px; flex:none; display:flex; align-items:center; justify-content:center; color:#fff; }
+  .act-bd { flex:1; min-width:0; }
+  .act-t { font-size:12.5px; font-weight:600; line-height:1.35; }
+  .act-q { display:flex; align-items:center; gap:7px; margin-top:8px; font-size:9px; color:var(--ink3); }
+  .act .tag { position:absolute; left:10px; bottom:10px; border-radius:0 8px 0 9px; font-size:8.5px; padding:1px 7px; }
+
+  /* ============ 详情 ============ */
+  .d-cover { height:158px; background:var(--grad); color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; position:relative; }
+  .d-cover .tag { position:absolute; left:12px; bottom:12px; }
+  .d-title-card { margin:14px 14px 0; padding:14px; }
+  .d-info { padding:4px 14px; margin:0 14px; }
+  .d-row { display:flex; gap:10px; padding:11px 0; border-bottom:1px solid var(--line); }
+  .d-row:last-child { border:none; }
+  .d-row b { font-size:12px; font-weight:500; display:block; }
+  .d-row small { font-size:10px; color:var(--ink3); }
+  .ag { margin:0 14px; padding:4px 14px; }
+  .ag-i { display:flex; gap:10px; padding:9px 0 9px 0; position:relative; }
+  .ag-t { width:44px; font-size:10px; font-weight:600; color:var(--primary); flex:none; padding-top:1px; }
+  .ag-dot { width:7px; height:7px; border-radius:50%; background:var(--primary); border:2px solid #DCE6FB; margin-top:4px; flex:none; position:relative; z-index:1; }
+  .ag-i::before { content:''; position:absolute; left:48.5px; top:0; bottom:0; width:1px; background:var(--line); }
+  .ag-i:first-child::before { top:16px; }
+  .ag-i:last-child::before { bottom:auto; height:16px; }
+  .ag-b b { font-size:11.5px; font-weight:500; display:block; }
+  .ag-b small { font-size:9.5px; color:var(--ink3); }
+
+  /* ============ 报名 ============ */
+  .e-sum { background:var(--grad); padding:16px 18px 15px; color:#fff; }
+  .e-sum b { font-size:14.5px; }
+  .e-sum .meta { color:rgba(255,255,255,.82); margin-top:5px; }
+  .f-card { background:#fff; border-radius:12px; box-shadow:var(--shadow); margin:0 14px; padding:0 13px; }
+  .f-i { display:flex; align-items:center; gap:8px; padding:11px 0; border-bottom:1px solid var(--line); font-size:11.5px; }
+  .f-i:last-child { border:none; }
+  .f-l { width:74px; flex:none; display:flex; align-items:center; gap:5px; }
+  .req { color:var(--ink); }
+  .req { color:#E5484D; font-weight:700; }
+  .f-v { flex:1; color:#B6BECD; }
+  .f-v.fill { color:var(--ink); }
+  .chips { display:flex; flex-wrap:wrap; gap:7px; margin:0 14px; padding:12px; }
+  .chip { padding:5px 12px; border-radius:999px; background:#F1F4F9; font-size:10.5px; color:var(--ink2); }
+  .chip.on { background:#EBF0FE; color:var(--primary); border:1px solid rgba(36,86,232,.35); font-weight:500; }
+
+  /* ============ 记录 ============ */
+  .rec { margin:0 14px 12px; padding:12px 13px; }
+  .rec-top { display:flex; justify-content:space-between; gap:8px; align-items:flex-start; }
+  .rec-top b { font-size:12.5px; line-height:1.4; flex:1; }
+  .rec .meta { margin-top:7px; }
+  .rec-foot { display:flex; justify-content:space-between; align-items:center; margin-top:9px; padding-top:8px; border-top:1px solid var(--line); font-size:9px; color:var(--ink3); }
+  .rec-btns { display:flex; gap:7px; }
+  .rb { padding:4px 11px; border-radius:999px; font-size:10px; font-weight:500; }
+  .rb-g { background:#EBF0FE; color:var(--primary); }
+  .rb-d { background:#FDEBEC; color:#E5484D; }
+
+  /* ============ 我的 ============ */
+  .me { background:var(--grad); padding:44px 18px 26px; text-align:center; color:#fff; }
+  .me-av { width:58px; height:58px; border-radius:50%; background:rgba(255,255,255,.18); border:2.5px solid rgba(255,255,255,.35); margin:0 auto; display:flex; align-items:center; justify-content:center; position:relative; }
+  .me-av .cam { position:absolute; right:-2px; bottom:-2px; width:18px; height:18px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 5px rgba(0,0,0,.15); }
+  .me b { font-size:15.5px; display:block; margin-top:9px; }
+  .me small { font-size:10px; color:rgba(255,255,255,.75); margin-top:3px; display:flex; align-items:center; justify-content:center; gap:4px; }
+  .menu { margin:14px 14px 0; padding:0 13px; }
+  .m-i { display:flex; align-items:center; gap:10px; padding:12px 0; border-bottom:1px solid var(--line); }
+  .m-i:last-child { border:none; }
+  .m-ic { width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#fff; flex:none; }
+  .m-t { flex:1; font-size:12.5px; }
+  .m-h { font-size:9.5px; color:var(--ink3); }
+  .arrow { color:#C4CDDC; font-size:13px; font-weight:300; }
+</style>
+</head>
+<body>
+
+<!-- SVG 图标定义（与小程序端同风格：24 网格 / 1.9 线宽 / 圆头） -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <g id="i-clock"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><path d="M12 12V7M12 12l4 1.4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></g>
+    <g id="i-pin"><path d="M12 10.5a6.5 6.5 0 1 0 0 0" fill="none"/><path d="M5.5 10.5a6.5 6.5 0 1 1 13 0L12 21z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"/></g>
+    <g id="i-cal"><rect x="3.2" y="5.5" width="17.6" height="15" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M3.2 10h17.6M8 3v4.2M16 3v4.2M7.4 14.4h3M13.6 14.4h3M7.4 17.6h9.2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></g>
+    <g id="i-user"><circle cx="12" cy="8.2" r="3.9" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M5.6 15.2a6.4 6.4 0 0 1 12.8 0" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" transform="translate(0 4.8) rotate(90 12 15.2)" opacity="0"/><path d="M6.1 19.5a6.4 6.4 0 0 1 11.8 0" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></g>
+    <g id="i-users"><circle cx="9.5" cy="8" r="3.4" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M3.9 15.2a6.3 6.3 0 0 1 11.2 0" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><circle cx="17" cy="10" r="2.7" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M14 17a4.8 4.8 0 0 1 6 0" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></g>
+    <g id="i-search"><circle cx="10.5" cy="10.5" r="6.2" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M15 15l5 5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></g>
+    <g id="i-chev"><path d="M9.5 5l6.5 7-6.5 7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="i-ticket"><rect x="3.2" y="7.5" width="17.6" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M12 8.6v2.8M12 12.6v2.8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></g>
+    <g id="i-check"><path d="M4.5 12.5l5 5 10-11" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="i-spark"><path d="M12 3l1.6 7.4L21 12l-7.4 1.6L12 21l-1.6-7.4L3 12l7.4-1.6z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></g>
+    <g id="i-build"><path d="M4 20.5V5.5h16v15H4z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M8.8 9.2v8M15.2 9.2v8M8.8 13.2h6.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></g>
+    <g id="i-home"><path d="M3 11L12 3.2 21 11M5 10v10.5h14V10M9.6 14.6v5.9h4.8v-5.9" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="i-clip"><rect x="5" y="4.2" width="14" height="16.3" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M9.5 4.2V2.5h5v1.7M8.5 13l2.5 2.5 4.5-5.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="i-mail"><rect x="3" y="6" width="18" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M3 6l9 7.4L21 6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="i-phone"><rect x="6.5" y="2.5" width="11" height="19" rx="2" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M10.5 18.6h3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></g>
+    <g id="i-school"><path d="M2.5 10L12 4.5 21.5 10M5 10v9.5h14V10M3 19.5h18M9.5 19.5V14h5v5.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="i-cap"><path d="M12 4.5L21 9l-9 4.5L3 9z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M5.5 11v6h6M19 11v5l2.8 2.8" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="i-note"><rect x="5" y="3.5" width="14" height="17" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M8 8.5h8M8 12.5h8M8 16.5h6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></g>
+    <g id="i-trash"><path d="M4 6.5h16M9.5 6.5V4h4v2.5M6.2 6.5l1 14h9.6l1-14M10 9.8l.6 7.6M14 9.8l-.6 7.6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="i-info"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M12 10.8V17" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><circle cx="12" cy="7.4" r="0.95" fill="currentColor"/></g>
+    <g id="i-img"><rect x="3.5" y="5" width="17" height="14" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="8.5" cy="9.5" r="1.7" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M4.2 17.5l4.8-4.9 5 4.4 6-5.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="i-share"><circle cx="17.5" cy="6" r="2.6" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="6.5" cy="12" r="2.6" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="17.5" cy="18" r="2.6" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M8.8 10.5l6.4-3.2M8.8 13.5l6.4 3.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></g>
+  </defs>
+</svg>
+
+<div class="head">
+  <h1>2026 青年科创峰会 · 活动报名小程序</h1>
+  <p>微信原生小程序 + 云开发（云数据库 / 云存储）｜统一线性图标｜主色 #2456E8</p>
+</div>
+
+<div class="stage">
+
+  <!-- ============ 1 首页 ============ -->
+  <div class="phone-wrap">
+    <div class="phone-label">① 活动首页</div>
+    <div class="phone"><div class="notch"></div>
+      <div class="screen">
+        <div class="scroll">
+          <div class="hero">
+            <div class="hero-badge" style="color:#fff"><svg class="ic" viewBox="0 0 24 24"><use href="#i-spark"/></svg></div>
+            <div class="hero-en">YOUTH SCI-TECH SUMMIT 2026</div>
+            <div class="hero-name">2026 青年科创峰会</div>
+            <div class="hero-slogan">面向顶尖高校本科生与研究生的年度科创盛会</div>
+            <div class="hero-meta">
+              <span><svg class="ic-s" viewBox="0 0 24 24"><use href="#i-cal"/></svg>2026.12.05 — 12.06</span>
+              <span><svg class="ic-s" viewBox="0 0 24 24"><use href="#i-pin"/></svg>上海国际会议中心</span>
+            </div>
+            <div class="hero-stats">
+              <div class="hs"><b>4</b><span>场活动</span></div><div class="hs-div"></div>
+              <div class="hs"><b>128</b><span>人已报名</span></div><div class="hs-div"></div>
+              <div class="hs"><b>TOP</b><span>高校学子</span></div>
+            </div>
+          </div>
+
+          <div class="search card">
+            <svg class="ic" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-search"/></svg>
+            搜索活动名称 / 城市
+          </div>
+
+          <div class="tabs">
+            <div class="tab-c on">全部</div><div class="tab-c">报名中</div><div class="tab-c">进行中</div><div class="tab-c">已结束</div>
+          </div>
+
+          <div class="act card">
+            <div class="act-cv" style="background:linear-gradient(135deg,#2E6BF6,#122B85)">
+              <svg class="ic" viewBox="0 0 24 24" style="width:26px;height:26px"><use href="#i-spark"/></svg>
+            </div>
+            <div class="act-bd">
+              <div class="act-t">主论坛 · 大模型与未来产业</div>
+              <div class="meta" style="margin-top:6px"><svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-clock"/></svg>2026.12.05 09:00</div>
+              <div class="meta" style="margin-top:4px"><svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-pin"/></svg>上海 · 上海国际会议中心</div>
+              <div class="act-q"><div class="progress"><i style="width:43%"></i></div>130/300</div>
+            </div>
+            <div class="tag tag-p">报名中</div>
+          </div>
+
+          <div class="act card">
+            <div class="act-cv" style="background:linear-gradient(135deg,#0FA7A0,#087E79)">
+              <svg class="ic" viewBox="0 0 24 24" style="width:26px;height:26px"><use href="#i-build"/></svg>
+            </div>
+            <div class="act-bd">
+              <div class="act-t">分论坛 · 集成电路与硬科技</div>
+              <div class="meta" style="margin-top:6px"><svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-clock"/></svg>2026.12.06 14:00</div>
+              <div class="meta" style="margin-top:4px"><svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-pin"/></svg>上海 · 珠海厅</div>
+              <div class="act-q"><div class="progress"><i style="width:92%"></i></div>110/120</div>
+            </div>
+            <div class="tag tag-p">报名中</div>
+          </div>
+
+          <div class="act card" style="opacity:.85">
+            <div class="act-cv" style="background:linear-gradient(135deg,#64748B,#334155)">
+              <svg class="ic" viewBox="0 0 24 24" style="width:26px;height:26px"><use href="#i-cal"/></svg>
+            </div>
+            <div class="act-bd">
+              <div class="act-t">往届回顾 · 2025 青年科创峰会</div>
+              <div class="meta" style="margin-top:6px"><svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-clock"/></svg>2025.12.06 09:00</div>
+              <div class="meta" style="margin-top:4px"><svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-pin"/></svg>上海 · 上海国际会议中心</div>
+              <div class="act-q"><div class="progress"><i style="width:100%"></i></div>260/260</div>
+            </div>
+            <div class="tag tag-n">已结束</div>
+          </div>
+        </div>
+
+        <div class="tabbar">
+          <div class="tab-i on"><svg class="ic" viewBox="0 0 24 24"><use href="#i-home"/></svg>首页</div>
+          <div class="tab-i"><svg class="ic" viewBox="0 0 24 24"><use href="#i-clip"/></svg>报名记录</div>
+          <div class="tab-i"><svg class="ic" viewBox="0 0 24 24"><use href="#i-user"/></svg>我的</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 2 详情 ============ -->
+  <div class="phone-wrap">
+    <div class="phone-label">② 活动详情</div>
+    <div class="phone"><div class="notch"></div>
+      <div class="screen">
+        <div class="scroll">
+          <div class="d-cover">
+            <svg viewBox="0 0 24 24" style="width:38px;height:38px;color:#fff"><use href="#i-spark"/></svg>
+            <div style="font-size:17px;font-weight:700;letter-spacing:1px">主论坛 · 大模型与未来产业</div>
+            <div class="tag tag-p" style="background:rgba(255,255,255,.2);color:#fff;backdrop-filter:blur(4px)">报名中</div>
+          </div>
+
+          <div class="d-title-card card">
+            <div style="font-size:15.5px;font-weight:600;line-height:1.4">主论坛 · 大模型与未来产业</div>
+            <div style="font-size:10.5px;color:var(--ink2);margin-top:4px">院士领衔，共话通用人工智能时代的人才机遇</div>
+            <div style="display:flex;gap:5px;margin-top:8px">
+              <span class="tag tag-n">峰会</span><span class="tag tag-n">主论坛</span><span class="tag tag-n">人工智能</span>
+            </div>
+            <div class="progress" style="margin-top:11px"><i style="width:43%"></i></div>
+            <div style="display:flex;justify-content:space-between;font-size:9.5px;color:var(--ink3);margin-top:5px">
+              <span>已报名 130 / 300 人</span><span>免费参加</span>
+            </div>
+          </div>
+
+          <div class="sec">活动信息</div>
+          <div class="d-info card">
+            <div class="d-row">
+              <svg class="ic" style="color:var(--ink3);margin-top:2px" viewBox="0 0 24 24"><use href="#i-clock"/></svg>
+              <div><b>2026.12.05 09:00</b><small>至 2026.12.05 18:00</small></div>
+            </div>
+            <div class="d-row">
+              <svg class="ic" style="color:var(--ink3);margin-top:2px" viewBox="0 0 24 24"><use href="#i-pin"/></svg>
+              <div><b>上海 · 上海国际会议中心</b><small>浦东新区滨江大道2727号</small></div>
+            </div>
+            <div class="d-row">
+              <svg class="ic" style="color:var(--ink3);margin-top:2px" viewBox="0 0 24 24"><use href="#i-users"/></svg>
+              <div><b>面向顶尖高校本科生与研究生</b><small>线下举办</small></div>
+            </div>
+            <div class="d-row">
+              <svg class="ic" style="color:var(--ink3);margin-top:2px" viewBox="0 0 24 24"><use href="#i-build"/></svg>
+              <div><b>青年科创人才发展中心</b><small>主办方</small></div>
+            </div>
+          </div>
+
+          <div class="sec">会议议程 <span style="margin-left:auto;font-size:10px;color:var(--ink3);font-weight:400">Day 1</span></div>
+          <div class="ag card">
+            <div class="ag-i"><div class="ag-t">09:30</div><div class="ag-dot"></div><div class="ag-b"><b>开幕致辞</b><small>主办方致辞</small></div></div>
+            <div class="ag-i"><div class="ag-t">10:00</div><div class="ag-dot"></div><div class="ag-b"><b>主旨演讲：大模型技术趋势</b><small>特邀院士</small></div></div>
+            <div class="ag-i"><div class="ag-t">14:00</div><div class="ag-dot"></div><div class="ag-b"><b>圆桌对话：青年人才与产业未来</b><small>企业科学家 × 高校学者</small></div></div>
+          </div>
+        </div>
+
+        <div class="footer-bar">
+          <div class="f-price"><div class="n">免费</div><div class="l">余 170 席</div></div>
+          <div class="btn">立即报名</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 3 报名 ============ -->
+  <div class="phone-wrap">
+    <div class="phone-label">③ 在线报名</div>
+    <div class="phone"><div class="notch"></div>
+      <div class="screen">
+        <div class="scroll">
+          <div class="e-sum">
+            <b>主论坛 · 大模型与未来产业</b>
+            <div class="meta">
+              <svg class="ic-s" viewBox="0 0 24 24"><use href="#i-clock"/></svg>2026.12.05 09:00
+              <span style="opacity:.5;margin:0 4px">|</span>
+              <svg class="ic-s" viewBox="0 0 24 24"><use href="#i-pin"/></svg>上海
+            </div>
+          </div>
+
+          <div class="sec">报名信息</div>
+          <div class="f-card">
+            <div class="f-i">
+              <svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-user"/></svg>
+              <div class="f-l">姓名<span class="req">*</span></div><div class="f-v fill">张明宇</div>
+            </div>
+            <div class="f-i">
+              <svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-phone"/></svg>
+              <div class="f-l">手机号<span class="req">*</span></div><div class="f-v fill">138 0000 1234</div>
+            </div>
+            <div class="f-i">
+              <svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-school"/></svg>
+              <div class="f-l">学校<span class="req">*</span></div><div class="f-v fill">清华大学</div>
+            </div>
+            <div class="f-i">
+              <svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-note"/></svg>
+              <div class="f-l">学院/专业<span class="req">*</span></div><div class="f-v">如：计算机科学与技术</div>
+            </div>
+            <div class="f-i">
+              <svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-cap"/></svg>
+              <div class="f-l">学历<span class="req">*</span></div><div class="f-v fill">硕士</div><span class="arrow">▾</span>
+            </div>
+            <div class="f-i">
+              <svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-mail"/></svg>
+              <div class="f-l">邮箱</div><div class="f-v">选填，用于接收参会材料</div>
+            </div>
+          </div>
+
+          <div class="sec">参会方向</div>
+          <div class="chips card" style="margin-top:0">
+            <span class="chip on">人工智能</span><span class="chip">集成电路</span><span class="chip">生命科学</span>
+            <span class="chip">新能源与双碳</span><span class="chip">金融科技</span><span class="chip">智能建造</span>
+          </div>
+
+          <div class="sec">备注</div>
+          <div class="card" style="margin:0 14px;padding:12px 13px">
+            <div style="font-size:11px;color:#B6BECD;line-height:1.6">选填，如需携带随行人员、饮食禁忌等可在此说明</div>
+            <div style="font-size:9px;color:var(--ink3);text-align:right;margin-top:8px">0/200</div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:7px;margin:14px 16px 0;font-size:10px;color:var(--ink3)">
+            <span style="width:15px;height:15px;border-radius:5px;background:var(--primary);display:inline-flex;align-items:center;justify-content:center">
+              <svg style="width:9px;height:9px;color:#fff" viewBox="0 0 24 24"><use href="#i-check"/></svg>
+            </span>
+            我已阅读并同意<span style="color:var(--primary)">《活动报名须知》</span>
+          </div>
+        </div>
+
+        <div class="footer-bar">
+          <div class="f-price"><div class="n">免费</div><div class="l">报名费用</div></div>
+          <div class="btn">提交报名</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 4 记录 ============ -->
+  <div class="phone-wrap">
+    <div class="phone-label">④ 报名记录</div>
+    <div class="phone"><div class="notch"></div>
+      <div class="screen">
+        <div class="scroll">
+          <div class="tabs" style="margin-top:16px">
+            <div class="tab-c on">全部</div><div class="tab-c">待审核</div><div class="tab-c">已通过</div><div class="tab-c">已取消</div>
+          </div>
+
+          <div class="rec card">
+            <div class="rec-top">
+              <b>主论坛 · 大模型与未来产业</b>
+              <span class="tag tag-a">待审核</span>
+            </div>
+            <div class="meta"><svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-clock"/></svg>2026.12.05 09:00</div>
+            <div class="meta"><svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-ticket"/></svg>编号 YSC1023-8216 · 签到码 K7M2XA</div>
+            <div class="meta"><svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-user"/></svg>张明宇 · 清华大学 · 硕士</div>
+            <div class="rec-foot">
+              <span>报名于 2026.10.23 13:40</span>
+              <div class="rec-btns"><span class="rb rb-g">活动详情</span><span class="rb rb-d">取消报名</span></div>
+            </div>
+          </div>
+
+          <div class="rec card">
+            <div class="rec-top">
+              <b>线上公开课 · 科研入门与论文写作</b>
+              <span class="tag tag-g">已通过</span>
+            </div>
+            <div class="meta"><svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-clock"/></svg>2026.11.02 19:00</div>
+            <div class="meta"><svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-ticket"/></svg>编号 YSC1102-3347 · 签到码 RPQ9W2</div>
+            <div class="meta"><svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-user"/></svg>张明宇 · 清华大学 · 硕士</div>
+            <div class="rec-foot">
+              <span>报名于 2026.10.22 20:11</span>
+              <div class="rec-btns"><span class="rb rb-g">活动详情</span></div>
+            </div>
+          </div>
+
+          <div class="rec card" style="opacity:.8">
+            <div class="rec-top">
+              <b>分论坛 · 集成电路与硬科技</b>
+              <span class="tag tag-n">已取消</span>
+            </div>
+            <div class="meta"><svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-clock"/></svg>2026.12.06 14:00</div>
+            <div class="meta"><svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-ticket"/></svg>编号 YSC1018-6612</div>
+            <div class="rec-foot">
+              <span>报名于 2026.10.18 09:26</span>
+              <div class="rec-btns"><span class="rb rb-g">活动详情</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tabbar">
+          <div class="tab-i"><svg class="ic" viewBox="0 0 24 24"><use href="#i-home"/></svg>首页</div>
+          <div class="tab-i on"><svg class="ic" viewBox="0 0 24 24"><use href="#i-clip"/></svg>报名记录</div>
+          <div class="tab-i"><svg class="ic" viewBox="0 0 24 24"><use href="#i-user"/></svg>我的</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 5 我的 ============ -->
+  <div class="phone-wrap">
+    <div class="phone-label">⑤ 我的（微信授权登录）</div>
+    <div class="phone"><div class="notch"></div>
+      <div class="screen">
+        <div class="scroll">
+          <div class="me">
+            <div class="me-av">
+              <svg viewBox="0 0 24 24" style="width:24px;height:24px;color:#fff"><use href="#i-user"/></svg>
+              <div class="cam"><svg class="ic-s" style="color:var(--primary)" viewBox="0 0 24 24"><use href="#i-img"/></svg></div>
+            </div>
+            <b>张明宇</b>
+            <small>清华大学 <svg class="ic-s" style="opacity:.75" viewBox="0 0 24 24"><use href="#i-note"/></svg></small>
+          </div>
+
+          <div class="menu card">
+            <div class="m-i">
+              <div class="m-ic" style="background:linear-gradient(135deg,#3D74F2,#1B3FD6)"><svg class="ic" viewBox="0 0 24 24"><use href="#i-clip"/></svg></div>
+              <div class="m-t">我的报名</div><span class="arrow">›</span>
+            </div>
+            <div class="m-i">
+              <div class="m-ic" style="background:linear-gradient(135deg,#F6B33D,#E08A12)"><svg class="ic" viewBox="0 0 24 24"><use href="#i-img"/></svg></div>
+              <div class="m-t">活动图片管理</div><span class="m-h">创建活动 / 上传封面</span><span class="arrow">›</span>
+            </div>
+            <div class="m-i">
+              <div class="m-ic" style="background:linear-gradient(135deg,#34C97B,#128A4F)"><svg class="ic" viewBox="0 0 24 24"><use href="#i-info"/></svg></div>
+              <div class="m-t">关于峰会</div><span class="arrow">›</span>
+            </div>
+            <div class="m-i">
+              <div class="m-ic" style="background:linear-gradient(135deg,#8A97AD,#5D6B82)"><svg class="ic" viewBox="0 0 24 24"><use href="#i-trash"/></svg></div>
+              <div class="m-t">清除本地缓存</div><span class="arrow">›</span>
+            </div>
+          </div>
+
+          <div class="card" style="margin:14px;padding:13px">
+            <div style="font-size:10px;color:var(--ink3);display:flex;align-items:center;gap:6px">
+              <svg class="ic-s" style="color:var(--ink3)" viewBox="0 0 24 24"><use href="#i-share"/></svg>
+              把峰会分享给同学，一起报名参加
+            </div>
+          </div>
+        </div>
+
+        <div class="tabbar">
+          <div class="tab-i"><svg class="ic" viewBox="0 0 24 24"><use href="#i-home"/></svg>首页</div>
+          <div class="tab-i"><svg class="ic" viewBox="0 0 24 24"><use href="#i-clip"/></svg>报名记录</div>
+          <div class="tab-i on"><svg class="ic" viewBox="0 0 24 24"><use href="#i-user"/></svg>我的</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<view class="page" wx:if="{{a}}">
+
+  <!-- 主视觉 -->
+  <view class="cover" bindtap="previewCover">
+    <image wx:if="{{a.cover}}" class="cover-img" src="{{a.cover}}" mode="aspectFill" />
+    <view wx:else class="cover-img cover-ph">
+      <image class="cover-ph-icon" src="/images/icons/spark_w.png" />
+      <view class="cover-ph-name">{{a.title}}</view>
+    </view>
+    <view class="tag cover-flag {{a.statusCls}}">{{a.statusText}}</view>
+  </view>
+
+  <view class="container">
+
+    <!-- 标题卡 -->
+    <view class="card">
+      <view class="t-title title">{{a.title}}</view>
+      <view class="t-sub title-sub" wx:if="{{a.subtitle}}">{{a.subtitle}}</view>
+      <view class="title-tags" wx:if="{{a.tags && a.tags.length}}">
+        <view class="tag tag-n" wx:for="{{a.tags}}" wx:key="*this">{{item}}</view>
+      </view>
+
+      <view class="progress mt24">
+        <view class="progress-inner" style="width: {{a.percent}}%"></view>
+      </view>
+      <view class="quota-line">
+        <text class="t-hint">已报名 {{a.enrolled || 0}} / {{a.quota || 0}} 人</text>
+        <text class="t-hint" wx:if="{{a.fee}}">费用 ¥{{a.fee}}</text>
+        <text class="t-hint" wx:else>免费参加</text>
+      </view>
+    </view>
+
+    <!-- 基础信息 -->
+    <view class="sec"><view class="sec-bar"></view><view class="sec-txt">活动信息</view></view>
+    <view class="card info">
+      <view class="info-row">
+        <image class="icon" src="/images/icons/clock_s.png" />
+        <view class="info-val">
+          <view class="info-main">{{a.startAtText}}</view>
+          <view class="t-hint">至 {{a.endAtText}}</view>
+        </view>
+      </view>
+      <view class="info-row">
+        <image class="icon" src="/images/icons/location_s.png" />
+        <view class="info-val">
+          <view class="info-main">{{a.city}} · {{a.venue}}</view>
+          <view class="t-hint" wx:if="{{a.address}}">{{a.address}}</view>
+        </view>
+      </view>
+      <view class="info-row">
+        <image class="icon" src="/images/icons/users_s.png" />
+        <view class="info-val">
+          <view class="info-main">面向{{a.audience || '顶尖高校本科生与研究生'}}</view>
+          <view class="t-hint">{{a.mode === 'online' ? '线上直播' : '线下举办'}}</view>
+        </view>
+      </view>
+      <view class="info-row" wx:if="{{a.organizer}}">
+        <image class="icon" src="/images/icons/building_s.png" />
+        <view class="info-val">
+          <view class="info-main">{{a.organizer}}</view>
+          <view class="t-hint">主办方</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 活动亮点 -->
+    <block wx:if="{{a.desc}}">
+      <view class="sec"><view class="sec-bar"></view><view class="sec-txt">活动亮点</view></view>
+      <view class="card desc">{{a.desc}}</view>
+    </block>
+
+    <!-- 议程 -->
+    <block wx:if="{{a.agenda && a.agenda.length}}">
+      <view class="sec">
+        <view class="sec-bar"></view><view class="sec-txt">会议议程</view>
+        <view class="sec-extra">Day 1</view>
+      </view>
+      <view class="card agenda">
+        <view class="ag-item" wx:for="{{a.agenda}}" wx:key="time">
+          <view class="ag-time">{{item.time}}</view>
+          <view class="ag-dot"></view>
+          <view class="ag-body">
+            <view class="ag-title">{{item.title}}</view>
+            <view class="t-hint" wx:if="{{item.desc}}">{{item.desc}}</view>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <!-- 嘉宾 -->
+    <block wx:if="{{a.speakers && a.speakers.length}}">
+      <view class="sec"><view class="sec-bar"></view><view class="sec-txt">特邀嘉宾</view></view>
+      <view class="card">
+        <view class="sp-item" wx:for="{{a.speakers}}" wx:key="name">
+          <view class="sp-avatar">{{item.name[0]}}</view>
+          <view class="sp-info">
+            <view class="sp-name">{{item.name}}</view>
+            <view class="t-hint">{{item.title}}</view>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <!-- 报名须知 -->
+    <view class="sec"><view class="sec-bar"></view><view class="sec-txt">报名须知</view></view>
+    <view class="card notice">
+      <view class="nt-item">
+        <image class="icon-sm" src="/images/icons/check_g.png" />
+        <text>报名后请等待主办方审核，审核结果可在「报名记录」中查看</text>
+      </view>
+      <view class="nt-item">
+        <image class="icon-sm" src="/images/icons/check_g.png" />
+        <text>签到时请出示报名记录中的签到码，凭码入场</text>
+      </view>
+      <view class="nt-item">
+        <image class="icon-sm" src="/images/icons/check_g.png" />
+        <text>报名信息仅用于本次活动签到与联络，主办方将严格保密</text>
+      </view>
+    </view>
+
+  </view>
+
+  <!-- 底部操作栏 -->
+  <view class="footer-bar">
+    <view class="footer-price">
+      <view class="num">{{a.fee ? '¥' + a.fee : '免费'}}</view>
+      <view class="lab">{{a.quota ? '余 ' + ((a.quota - (a.enrolled || 0)) > 0 ? a.quota - (a.enrolled || 0) : 0) + ' 席' : ''}}</view>
+    </view>
+    <button class="btn btn-primary footer-btn {{btnDisabled ? 'disabled' : ''}}"
+            bindtap="onEnroll">{{btnText}}</button>
+  </view>
+</view>
+
+<!-- 加载中 -->
+<view wx:elif="{{loading}}" class="container">
+  <view class="card skel-card">
+    <view class="skel-line w60"></view>
+    <view class="skel-line w90"></view>
+    <view class="skel-line w80"></view>
+  </view>
+</view>

@@ -1,0 +1,72 @@
+<view class="page container">
+
+  <!-- 状态筛选 -->
+  <view class="tabs">
+    <view wx:for="{{tabs}}" wx:key="key"
+          class="tab {{curTab === item.key ? 'tab-on' : ''}}"
+          data-key="{{item.key}}" bindtap="onTab">{{item.text}}</view>
+  </view>
+
+  <!-- 未登录 -->
+  <view wx:if="{{needLogin}}" class="empty">
+    <view class="empty-icon">
+      <image class="icon-lg" src="/images/icons/user_s.png" />
+    </view>
+    <view class="empty-txt">登录后即可查看报名记录</view>
+    <button class="btn btn-primary btn-sm" bindtap="goLogin">微信授权登录</button>
+  </view>
+
+  <block wx:elif="{{!loading}}">
+    <!-- 记录卡片 -->
+    <view wx:for="{{list}}" wx:key="_id" class="rec card">
+
+      <view class="rec-top">
+        <view class="rec-title" data-id="{{item.activityId}}" bindtap="goDetail">{{item.activityTitle}}</view>
+        <view class="tag {{item.statusCls}}">{{item.statusText}}</view>
+      </view>
+
+      <view class="meta-line rec-line">
+        <image class="icon-sm" src="/images/icons/clock_s.png" />
+        <text>{{item.activityTimeText}}</text>
+      </view>
+      <view class="meta-line rec-line">
+        <image class="icon-sm" src="/images/icons/ticket_s.png" />
+        <text>编号 {{item.regNo}} · 签到码 {{item.checkCode}}</text>
+      </view>
+      <view class="meta-line rec-line">
+        <image class="icon-sm" src="/images/icons/user_s.png" />
+        <text>{{item.name}} · {{item.school}} · {{item.degree}}</text>
+      </view>
+
+      <view class="rec-foot">
+        <text class="t-hint">报名于 {{item.createdAtText}}</text>
+        <view class="rec-actions">
+          <button wx:if="{{item.activityId && item.status !== 'cancelled'}}"
+                  class="btn btn-ghost btn-sm" data-id="{{item.activityId}}" bindtap="goDetail">活动详情</button>
+          <button wx:if="{{item.status === 'pending' || item.status === 'approved'}}"
+                  class="btn btn-danger btn-sm"
+                  data-id="{{item._id}}" bindtap="onCancel">取消报名</button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{list.length === 0}}" class="empty">
+      <view class="empty-icon">
+        <image class="icon-lg" src="/images/icons/clipboard_s.png" />
+      </view>
+      <view class="empty-txt">{{curTab === 'all' ? '暂无报名记录，去看看正在报名的活动吧' : '该状态下暂无记录'}}</view>
+      <button wx:if="{{curTab === 'all'}}" class="btn btn-primary btn-sm" bindtap="goEnroll">去逛活动</button>
+    </view>
+  </block>
+
+  <!-- 骨架 -->
+  <block wx:elif="{{loading}}">
+    <view wx:for="{{[1,2]}}" wx:key="*this" class="card skel-card">
+      <view class="skel-line w60"></view>
+      <view class="skel-line w90"></view>
+      <view class="skel-line w70"></view>
+    </view>
+  </block>
+
+</view>

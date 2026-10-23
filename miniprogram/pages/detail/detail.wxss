@@ -1,0 +1,203 @@
+/* ---------- 主视觉 ---------- */
+.cover {
+  position: relative;
+  height: 380rpx;
+}
+.cover-img {
+  width: 100%;
+  height: 100%;
+}
+.cover-ph {
+  background: var(--grad-hero);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20rpx;
+}
+.cover-ph-icon {
+  width: 84rpx;
+  height: 84rpx;
+}
+.cover-ph-name {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 2rpx;
+  padding: 0 60rpx;
+  text-align: center;
+}
+.cover-flag {
+  position: absolute;
+  left: 28rpx;
+  bottom: 24rpx;
+  backdrop-filter: blur(6px);
+}
+
+/* ---------- 标题卡 ---------- */
+.title {
+  line-height: 1.4;
+}
+.title-sub {
+  margin-top: 10rpx;
+}
+.title-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 18rpx;
+}
+.quota-line {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12rpx;
+}
+
+/* ---------- 基础信息 ---------- */
+.info {
+  padding: 12rpx 28rpx;
+}
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 18rpx;
+  padding: 24rpx 0;
+  border-bottom: 2rpx solid var(--line);
+}
+.info-row:last-child {
+  border-bottom: none;
+}
+.info-row .icon {
+  margin-top: 4rpx;
+}
+.info-main {
+  font-size: 28rpx;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ---------- 亮点 ---------- */
+.desc {
+  font-size: 27rpx;
+  color: var(--ink-2);
+  line-height: 1.75;
+  white-space: pre-wrap;
+}
+
+/* ---------- 议程时间轴 ---------- */
+.agenda {
+  padding: 12rpx 28rpx;
+}
+.ag-item {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  padding: 22rpx 0 22rpx 26rpx;
+}
+.ag-item::before {
+  content: '';
+  position: absolute;
+  left: 88rpx;
+  top: 0;
+  bottom: 0;
+  width: 2rpx;
+  background: var(--line);
+}
+.ag-item:first-child::before {
+  top: 34rpx;
+}
+.ag-item:last-child::before {
+  bottom: auto;
+  height: 34rpx;
+}
+.ag-time {
+  width: 110rpx;
+  font-size: 24rpx;
+  color: var(--primary);
+  font-weight: 600;
+  flex-shrink: 0;
+  padding-top: 2rpx;
+}
+.ag-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 4rpx solid #DCE6FB;
+  margin: 8rpx 26rpx 0 -8rpx;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+.ag-body {
+  flex: 1;
+}
+.ag-title {
+  font-size: 28rpx;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ---------- 嘉宾 ---------- */
+.sp-item {
+  display: flex;
+  align-items: center;
+  gap: 22rpx;
+  padding: 18rpx 0;
+}
+.sp-avatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3D74F2, #1B3FD6);
+  color: #fff;
+  font-size: 34rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.sp-name {
+  font-size: 29rpx;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ---------- 报名须知 ---------- */
+.notice {
+  padding: 26rpx 28rpx;
+}
+.nt-item {
+  display: flex;
+  gap: 14rpx;
+  align-items: flex-start;
+  font-size: 25rpx;
+  color: var(--ink-2);
+  line-height: 1.65;
+  margin-bottom: 14rpx;
+}
+.nt-item:last-child {
+  margin-bottom: 0;
+}
+.nt-item .icon-sm {
+  margin-top: 6rpx;
+}
+
+/* ---------- 骨架 ---------- */
+.skel-card {
+  padding: 40rpx 28rpx;
+}
+.skel-line {
+  height: 28rpx;
+  border-radius: 8rpx;
+  background: #EDF1F8;
+  margin-bottom: 22rpx;
+}
+.w60 { width: 60%; }
+.w80 { width: 80%; }
+.w90 { width: 90%; }
+
+.page {
+  padding-bottom: 180rpx;
+}

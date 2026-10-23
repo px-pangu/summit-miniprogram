@@ -1,0 +1,34 @@
+# 微信开发者工具 · 本机个人配置（含本地路径，每人不同）
+project.private.config.json
+
+# 云函数依赖：部署时由云端安装，本地无需入库
+cloudfunctions/*/node_modules/
+cloudfunctions/*/package-lock.json
+miniprogram/node_modules/
+package-lock.json
+
+# 日志
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# 系统 / 编辑器文件
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 敏感凭据兜底
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+*keystore*

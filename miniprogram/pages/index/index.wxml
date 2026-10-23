@@ -1,0 +1,116 @@
+<view class="page">
+
+  <!-- 顶部品牌区 -->
+  <view class="hero">
+    <view class="hero-badge">
+      <image class="hero-badge-icon" src="/images/icons/spark_w.png" />
+    </view>
+    <view class="hero-en">{{cfg.summitNameEn}}</view>
+    <view class="hero-name">{{cfg.summitName}}</view>
+    <view class="hero-slogan">{{cfg.slogan}}</view>
+
+    <view class="hero-meta">
+      <view class="hero-meta-item">
+        <image class="icon-sm" src="/images/icons/calendar_w.png" />
+        <text>{{cfg.date}}</text>
+      </view>
+      <view class="hero-meta-item">
+        <image class="icon-sm" src="/images/icons/location_w.png" />
+        <text>{{cfg.venue}}</text>
+      </view>
+    </view>
+
+    <view class="hero-stats">
+      <view class="hero-stat">
+        <view class="hero-stat-num">{{stats.total}}</view>
+        <view class="hero-stat-lab">场活动</view>
+      </view>
+      <view class="hero-stat-div"></view>
+      <view class="hero-stat">
+        <view class="hero-stat-num">{{stats.people}}</view>
+        <view class="hero-stat-lab">人已报名</view>
+      </view>
+      <view class="hero-stat-div"></view>
+      <view class="hero-stat">
+        <view class="hero-stat-num">TOP</view>
+        <view class="hero-stat-lab">高校学子</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="container">
+
+    <!-- 搜索 -->
+    <view class="search card">
+      <image class="icon" src="/images/icons/search_s.png" />
+      <input class="search-input" placeholder="搜索活动名称 / 城市" placeholder-class="ph"
+             value="{{keyword}}" bindinput="onSearch" confirm-type="search" />
+    </view>
+
+    <!-- 状态筛选 -->
+    <view class="tabs">
+      <view wx:for="{{tabs}}" wx:key="key"
+            class="tab {{curTab === item.key ? 'tab-on' : ''}}"
+            data-key="{{item.key}}" bindtap="onTab">{{item.text}}</view>
+    </view>
+
+    <!-- 活动列表 -->
+    <block wx:if="{{!loading}}">
+      <view wx:for="{{list}}" wx:key="_id" class="act card"
+            data-id="{{item._id}}" bindtap="goDetail" hover-class="press">
+
+        <view class="act-cover-wrap">
+          <image wx:if="{{item.cover}}" class="act-cover" src="{{item.cover}}" mode="aspectFill" />
+          <view wx:else class="act-cover act-cover-ph">
+            <image class="act-cover-ph-icon" src="/images/icons/spark_p.png" />
+          </view>
+          <view class="tag act-flag {{item.statusCls}}">{{item.statusText}}</view>
+        </view>
+
+        <view class="act-body">
+          <view class="act-name">{{item.title}}</view>
+          <view class="meta-line act-line">
+            <image class="icon-sm" src="/images/icons/clock_s.png" />
+            <text>{{item.startAtText}}</text>
+          </view>
+          <view class="meta-line act-line">
+            <image class="icon-sm" src="/images/icons/location_s.png" />
+            <text>{{item.city}} · {{item.venue}}</text>
+          </view>
+
+          <view class="act-quota">
+            <view class="progress grow">
+              <view class="progress-inner" style="width: {{item.percent}}%"></view>
+            </view>
+            <text class="act-quota-num">{{item.enrolled || 0}}/{{item.quota || 0}}</text>
+          </view>
+        </view>
+
+        <view class="act-go">
+          <image class="icon-sm" src="/images/icons/chevron-right_s.png" />
+        </view>
+      </view>
+
+      <!-- 空状态 -->
+      <view wx:if="{{list.length === 0}}" class="empty">
+        <view class="empty-icon">
+          <image class="icon-lg" src="/images/icons/calendar_s.png" />
+        </view>
+        <view class="empty-txt">{{keyword ? '没有找到相关活动' : '活动即将上线，敬请期待'}}</view>
+      </view>
+    </block>
+
+    <!-- 骨架屏 -->
+    <block wx:elif="{{loading}}">
+      <view wx:for="{{[1,2,3]}}" wx:key="*this" class="act card skel">
+        <view class="skel-cover"></view>
+        <view class="act-body">
+          <view class="skel-line w70"></view>
+          <view class="skel-line w90"></view>
+          <view class="skel-line w50"></view>
+        </view>
+      </view>
+    </block>
+
+  </view>
+</view>

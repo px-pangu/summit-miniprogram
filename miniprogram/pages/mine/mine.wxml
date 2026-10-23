@@ -1,0 +1,85 @@
+<view class="page">
+
+  <!-- 用户信息区 -->
+  <view class="me-hero">
+
+    <!-- 未登录 -->
+    <block wx:if="{{!profile}}">
+      <view class="me-avatar me-avatar-ph">
+        <image class="me-avatar-icon" src="/images/icons/user_w.png" />
+      </view>
+      <view class="me-name">未登录</view>
+      <view class="me-sub">登录后可报名活动、管理报名记录</view>
+      <button class="btn btn-ghost me-login-btn" bindtap="onLogin">
+        <image class="icon-sm" src="/images/icons/ticket_p.png" />
+        微信授权登录
+      </button>
+    </block>
+
+    <!-- 已登录 -->
+    <block wx:else>
+      <button class="me-avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image wx:if="{{profile.avatarUrl || profile.avatarFileID}}" class="me-avatar"
+               src="{{profile.avatarUrl || profile.avatarFileID}}" />
+        <view wx:else class="me-avatar me-avatar-ph me-avatar-edit">
+          <image class="me-avatar-icon" src="/images/icons/user_w.png" />
+        </view>
+        <view class="me-avatar-cam">
+          <image class="me-avatar-cam-icon" src="/images/icons/image_w.png" />
+        </view>
+      </button>
+
+      <block wx:if="{{!editing}}">
+        <view class="me-name">{{profile.nickName || '微信用户'}}</view>
+        <view class="me-sub" bindtap="onStartEdit">
+          {{profile.school || '点击完善学校信息'}}
+          <image class="icon-sm me-edit-icon" src="/images/icons/note_s.png" />
+        </view>
+      </block>
+
+      <view wx:else class="me-edit">
+        <input class="me-edit-input" type="nickname" placeholder="请输入昵称" placeholder-class="form-input-ph"
+               value="{{nickName}}" bindinput="onNickInput" />
+        <input class="me-edit-input" placeholder="请输入学校" placeholder-class="form-input-ph"
+               value="{{school}}" bindinput="onSchoolInput" />
+        <view class="me-edit-btns">
+          <button class="btn btn-outline btn-sm" bindtap="onCancelEdit">取消</button>
+          <button class="btn btn-primary btn-sm" bindtap="onSaveProfile">保存</button>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class="container">
+
+    <!-- 菜单 -->
+    <view class="card menu">
+      <view class="menu-item" bindtap="goRecords" hover-class="menu-press">
+        <view class="menu-icon mi-p"><image class="icon" src="/images/icons/clipboard_w.png" /></view>
+        <view class="menu-txt grow">我的报名</view>
+        <image class="form-arrow" src="/images/icons/chevron-right_s.png" />
+      </view>
+
+      <view class="menu-item" bindtap="goPublish" hover-class="menu-press">
+        <view class="menu-icon mi-a"><image class="icon" src="/images/icons/image_w.png" /></view>
+        <view class="menu-txt grow">活动图片管理</view>
+        <view class="t-hint">创建活动 / 上传封面</view>
+        <image class="form-arrow" src="/images/icons/chevron-right_s.png" />
+      </view>
+
+      <view class="menu-item" bindtap="onAbout" hover-class="menu-press">
+        <view class="menu-icon mi-b"><image class="icon" src="/images/icons/info_w.png" /></view>
+        <view class="menu-txt grow">关于峰会</view>
+        <image class="form-arrow" src="/images/icons/chevron-right_s.png" />
+      </view>
+
+      <view class="menu-item" bindtap="onClearCache" hover-class="menu-press">
+        <view class="menu-icon mi-n"><image class="icon" src="/images/icons/trash_w.png" /></view>
+        <view class="menu-txt grow">清除本地缓存</view>
+        <image class="form-arrow" src="/images/icons/chevron-right_s.png" />
+      </view>
+    </view>
+
+    <view class="t-hint me-foot">青年科创峰会 · 报名系统</view>
+  </view>
+</view>

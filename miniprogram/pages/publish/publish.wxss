@@ -1,0 +1,84 @@
+.cover-box {
+  position: relative;
+  height: 320rpx;
+  border-radius: 18rpx;
+  overflow: hidden;
+}
+.cover-img {
+  width: 100%;
+  height: 100%;
+}
+.cover-remove {
+  position: absolute;
+  top: 16rpx;
+  right: 16rpx;
+  width: 52rpx;
+  height: 52rpx;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cover-remove-icon {
+  width: 26rpx;
+  height: 26rpx;
+}
+.cover-badge {
+  position: absolute;
+  left: 16rpx;
+  bottom: 16rpx;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 999rpx;
+  padding: 6rpx 18rpx;
+  font-size: 20rpx;
+  color: var(--primary);
+}
+
+.cover-add {
+  height: 240rpx;
+  border: 3rpx dashed #C9D4E8;
+  border-radius: 18rpx;
+  background: #F8FAFD;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+}
+.cover-add-icon {
+  width: 64rpx;
+  height: 64rpx;
+  margin-bottom: 6rpx;
+}
+
+.form-picker {
+  flex: 1;
+  font-size: 28rpx;
+  color: var(--ink);
+}
+.form-picker.ph { color: #B6BECD; }
+
+.ta {
+  width: 100%;
+  height: 180rpx;
+  font-size: 27rpx;
+  line-height: 1.6;
+}
+.ta-sm {
+  height: 220rpx;
+}
+
+.submit {
+  margin-top: 40rpx;
+}
+.foot-note {
+  text-align: center;
+  margin: 20rpx 0 40rpx;
+}
+.menu-press {
+  opacity: 0.75;
+}
