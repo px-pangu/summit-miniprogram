@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>青创汇活动报名 · 网页演示版</title>
+<meta name="description" content="青创汇活动报名微信小程序的可交互网页演示版：活动首页、活动详情、在线报名、报名记录、我的。" />
+<style>
+:root{
+  --primary:#2456E8; --primary-deep:#16389E; --primary-soft:#EBF0FE;
+  --ink:#0F172A; --ink-2:#475569; --ink-3:#94A3B8;
+  --bg:#F4F6FA; --card:#FFFFFF; --line:#EDF0F5;
+  --green:#16A34A; --green-soft:#E8F7EE;
+  --amber:#B45309; --amber-soft:#FEF3E2;
+  --red:#E5484D; --red-soft:#FDEBEC;
+  --grad-hero:linear-gradient(135deg,#2E6BF6 0%,#1B3FD6 58%,#122B85 100%);
+  --shadow-card:0 3px 12px rgba(15,23,42,.06);
+  --shadow-btn:0 6px 16px rgba(36,86,232,.30);
+  --tabbar-h:56px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:#ECEFF5;
+  color:var(--ink);
+  font:14px/1.55 -apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  display:flex; flex-direction:column; align-items:center;
+  padding:24px 12px 40px;
+}
+.masthead{width:100%;max-width:430px;margin-bottom:16px;text-align:center}
+.masthead h1{margin:0 0 6px;font-size:19px;font-weight:700;letter-spacing:.2px}
+.masthead p{margin:0;font-size:12.5px;color:#6B7688;line-height:1.7}
+.badge-demo{display:inline-block;margin-top:8px;padding:3px 10px;border-radius:20px;
+  background:var(--primary-soft);color:var(--primary);font-size:11.5px;font-weight:600}
+
+/* ---------- 手机外壳 ---------- */
+.phone{
+  position:relative;width:390px;max-width:100%;height:812px;max-height:calc(100vh - 190px);
+  background:var(--bg);border-radius:34px;overflow:hidden;
+  box-shadow:0 24px 60px rgba(15,23,42,.22),0 2px 6px rgba(15,23,42,.10);
+  border:1px solid #D8DEE9;
+}
+.statusbar{
+  height:38px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;font-size:12px;font-weight:600;color:var(--ink);
+  background:#fff;flex:0 0 auto;
+}
+.statusbar.dark{background:transparent;color:#fff}
+.statusbar .dots{display:flex;gap:4px;align-items:center}
+.statusbar .dots i{width:4px;height:8px;background:currentColor;border-radius:1px;display:block;opacity:.9}
+.statusbar .dots i:nth-child(4){height:6px;opacity:.45}
+.statusbar .dots i:nth-child(5){height:4px;opacity:.45}
+
+.navbar{
+  height:44px;display:flex;align-items:center;justify-content:center;position:relative;
+  background:#fff;border-bottom:1px solid var(--line);flex:0 0 auto;font-size:16px;font-weight:600;
+}
+.navbar.transparent{background:transparent;border-bottom:none;color:#fff}
+.navbar .back{position:absolute;left:10px;top:0;height:44px;display:flex;align-items:center;
+  padding:0 6px;border:0;background:none;cursor:pointer;color:inherit}
+.navbar .nav-act{position:absolute;right:12px;top:0;height:44px;display:flex;align-items:center;
+  border:0;background:none;font-size:13px;color:var(--primary);cursor:pointer;font-weight:500}
+
+.viewport{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;background:var(--bg)}
+.viewport::-webkit-scrollbar{width:0}
+.viewport.gray{background:var(--bg)}
+.viewport.white{background:#fff}
+
+.tabbar{
+  height:var(--tabbar-h);display:flex;background:#fff;border-top:1px solid var(--line);flex:0 0 auto;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.tabbar.hidden{display:none}
+.tabbar button{
+  flex:1;border:0;background:none;cursor:pointer;padding:6px 0 4px;
+  display:flex;flex-direction:column;align-items:center;gap:3px;color:#9AA4B8;font-size:11px;font-family:inherit;
+}
+.tabbar button.on{color:var(--primary);font-weight:600}
+
+/* ---------- 通用组件 ---------- */
+.page{padding-bottom:16px}
+.card{background:var(--card);border-radius:14px;box-shadow:var(--shadow-card);margin:12px;overflow:hidden}
+.pad{padding:14px}
+.sec-title{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:700;margin:0 0 4px}
+.sec-title .bar{width:3px;height:15px;border-radius:2px;background:var(--primary)}
+.muted{color:var(--ink-3)}
+.small{font-size:12px}
+.row{display:flex;align-items:center;gap:8px}
+.between{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600;line-height:1.7}
+.tag-p{background:var(--primary-soft);color:var(--primary)}
+.tag-g{background:var(--green-soft);color:var(--green)}
+.tag-a{background:var(--amber-soft);color:var(--amber)}
+.tag-n{background:#F1F3F7;color:var(--ink-3)}
+.tag-r{background:var(--red-soft);color:var(--red)}
+.tag-line{background:#F4F6FA;color:var(--ink-2);font-weight:500}
+
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  border:0;border-radius:12px;padding:12px 18px;font-size:15px;font-weight:600;
+  font-family:inherit;cursor:pointer;background:var(--primary);color:#fff;box-shadow:var(--shadow-btn);
+}
+.btn:active{transform:translateY(1px)}
+.btn.block{width:100%}
+.btn.ghost{background:#fff;color:var(--primary);border:1px solid #D5DEF9;box-shadow:none}
+.btn.disabled,.btn:disabled{background:#C7CFE0;box-shadow:none;cursor:not-allowed}
+
+/* ---------- 首页 ---------- */
+.hero{background:var(--grad-hero);color:#fff;padding:16px 16px 22px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-46px;top:-56px;width:190px;height:190px;border-radius:50%;
+  background:rgba(255,255,255,.09)}
+.hero::before{content:"";position:absolute;right:44px;bottom:-72px;width:130px;height:130px;border-radius:50%;
+  background:rgba(255,255,255,.07)}
+.hero .en{font-size:10.5px;letter-spacing:2.4px;opacity:.72;font-weight:600}
+.hero h2{margin:5px 0 4px;font-size:21px;font-weight:800;letter-spacing:.4px}
+.hero .slogan{font-size:12px;opacity:.85;max-width:76%}
+.stats{display:flex;margin:-14px 12px 0;background:#fff;border-radius:14px;box-shadow:var(--shadow-card);
+  padding:12px 4px;position:relative;z-index:2}
+.stats div{flex:1;text-align:center;border-right:1px solid var(--line)}
+.stats div:last-child{border-right:0}
+.stats b{display:block;font-size:18px;color:var(--primary);font-weight:800;line-height:1.2}
+.stats span{font-size:11px;color:var(--ink-3)}
+
+.searchbar{display:flex;align-items:center;gap:8px;margin:12px;background:#fff;border-radius:12px;
+  padding:9px 12px;box-shadow:var(--shadow-card);color:var(--ink-3)}
+.searchbar input{border:0;outline:none;flex:1;font-size:13.5px;font-family:inherit;color:var(--ink);background:transparent}
+.chips{display:flex;gap:8px;padding:2px 12px 10px;overflow-x:auto}
+.chips::-webkit-scrollbar{height:0}
+.chip{flex:0 0 auto;border:0;border-radius:20px;padding:6px 14px;font-size:12.5px;font-family:inherit;
+  background:#fff;color:var(--ink-2);cursor:pointer;border:1px solid var(--line)}
+.chip.on{background:var(--primary);color:#fff;border-color:var(--primary);font-weight:600}
+
+.cover{height:128px;position:relative;color:#fff;padding:12px;display:flex;flex-direction:column;
+  justify-content:flex-end;overflow:hidden}
+.cover .cov-tag{position:absolute;left:12px;top:12px}
+.cover .cov-title{font-size:15px;font-weight:700;text-shadow:0 1px 6px rgba(0,0,0,.25)}
+.cover .cov-sub{font-size:11.5px;opacity:.9;margin-top:2px;text-shadow:0 1px 6px rgba(0,0,0,.25)}
+.cover .grid{position:absolute;inset:0;opacity:.22;
+  background-image:linear-gradient(rgba(255,255,255,.6) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.6) 1px,transparent 1px);
+  background-size:26px 26px}
+.acard{margin:0 12px 12px;background:#fff;border-radius:14px;box-shadow:var(--shadow-card);overflow:hidden;cursor:pointer}
+.acard .body{padding:12px}
+.acard h3{margin:0 0 4px;font-size:15px;font-weight:700;line-height:1.4}
+.acard .sub{font-size:12px;color:var(--ink-3);margin-bottom:9px}
+.meta{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--ink-2)}
+.meta .row svg{flex:0 0 auto}
+.bar{height:5px;border-radius:3px;background:#EEF1F7;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;background:var(--primary);border-radius:3px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+
+/* ---------- 详情 ---------- */
+.d-hero{height:196px;position:relative;color:#fff;padding:18px 16px;display:flex;flex-direction:column;justify-content:flex-end}
+.d-hero h2{margin:0 0 6px;font-size:21px;font-weight:800;text-shadow:0 2px 8px rgba(0,0,0,.28);line-height:1.3}
+.d-hero .row{gap:6px;font-size:12px;opacity:.92}
+.info-row{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);font-size:13px;align-items:flex-start}
+.info-row:last-child{border-bottom:0}
+.info-row .k{color:var(--ink-3);flex:0 0 62px}
+.info-row .v{flex:1;color:var(--ink)}
+.desc{font-size:13px;color:var(--ink-2);white-space:pre-wrap;line-height:1.8}
+.timeline{position:relative;padding-left:22px}
+.timeline::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:#E7EBF3}
+.tl-item{position:relative;padding-bottom:14px}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:"";position:absolute;left:-21px;top:5px;width:9px;height:9px;border-radius:50%;
+  background:#fff;border:2px solid var(--primary)}
+.tl-time{font-size:12px;font-weight:700;color:var(--primary)}
+.tl-title{font-size:13.5px;font-weight:600;margin-top:1px}
+.tl-desc{font-size:12px;color:var(--ink-3);margin-top:1px}
+.sp{display:flex;gap:10px;align-items:center;padding:9px 0}
+.sp .av{width:38px;height:38px;border-radius:50%;background:var(--primary-soft);color:var(--primary);
+  display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex:0 0 auto}
+.sp .n{font-size:13.5px;font-weight:600}
+.sp .t{font-size:12px;color:var(--ink-3)}
+.footbar{flex:0 0 auto;background:#fff;border-top:1px solid var(--line);padding:10px 14px;
+  display:flex;align-items:center;gap:12px;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+.footbar .price{font-size:12px;color:var(--ink-3)}
+.footbar .price b{font-size:19px;color:var(--green);font-weight:800}
+.footbar .btn{flex:1}
+
+/* ---------- 报名 ---------- */
+.field{padding:12px 0;border-bottom:1px solid var(--line)}
+.field:last-child{border-bottom:0}
+.field .lb{font-size:13px;font-weight:600;margin-bottom:7px;display:flex;align-items:center;gap:4px}
+.field .lb em{color:var(--red);font-style:normal}
+.field input,.field textarea,.field select{
+  width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.5px;
+  font-family:inherit;color:var(--ink);background:#FAFBFD;outline:none;
+}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--primary);background:#fff}
+.field textarea{resize:none;height:74px}
+.field .hint{font-size:11.5px;color:var(--ink-3);margin-top:5px}
+.picker{display:flex;flex-wrap:wrap;gap:8px}
+.picker button{border:1px solid var(--line);background:#FAFBFD;border-radius:20px;padding:7px 13px;
+  font-size:12.5px;font-family:inherit;color:var(--ink-2);cursor:pointer}
+.picker button.on{background:var(--primary-soft);border-color:var(--primary);color:var(--primary);font-weight:600}
+.switch{display:flex;align-items:center;justify-content:space-between;font-size:13.5px}
+.toggle{width:44px;height:26px;border-radius:14px;background:#DDE2EC;position:relative;transition:.2s;cursor:pointer;flex:0 0 auto}
+.toggle.on{background:var(--primary)}
+.toggle i{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
+.toggle.on i{left:21px}
+.err{background:var(--red-soft);color:var(--red);font-size:12.5px;padding:8px 12px;border-radius:10px;margin-top:10px}
+
+/* 成功态 */
+.okbox{text-align:center;padding:26px 18px 8px}
+.ok-ico{width:62px;height:62px;margin:0 auto 12px;border-radius:50%;background:var(--green-soft);
+  color:var(--green);display:flex;align-items:center;justify-content:center}
+.okbox h3{margin:0 0 4px;font-size:17px;font-weight:800}
+.okbox p{margin:0;color:var(--ink-3);font-size:12.5px}
+.codebox{margin:14px 12px;background:var(--primary-soft);border-radius:14px;padding:14px;text-align:center}
+.codebox .k{font-size:11.5px;color:var(--primary);letter-spacing:1px;font-weight:600}
+.codebox .v{font-size:26px;font-weight:800;letter-spacing:4px;color:var(--primary-deep);margin-top:3px}
+.codebox .n{font-size:12px;color:var(--ink-2);margin-top:8px;font-weight:600}
+
+/* ---------- 记录 / 我的 ---------- */
+.rcard{margin:0 12px 12px;background:#fff;border-radius:14px;box-shadow:var(--shadow-card);padding:13px}
+.rcard h3{margin:0 0 3px;font-size:14.5px;font-weight:700}
+.seg{display:flex;gap:6px;margin:12px 12px 4px;background:#fff;border-radius:12px;padding:4px;box-shadow:var(--shadow-card)}
+.seg button{flex:1;border:0;background:none;border-radius:9px;padding:7px 0;font-size:12.5px;cursor:pointer;
+  font-family:inherit;color:var(--ink-2)}
+.seg button.on{background:var(--primary);color:#fff;font-weight:600}
+.empty{text-align:center;padding:66px 24px;color:var(--ink-3)}
+.empty .ico{width:58px;height:58px;margin:0 auto 12px;border-radius:50%;background:#EEF1F7;display:flex;
+  align-items:center;justify-content:center;color:#B7C0D0}
+.empty p{margin:0;font-size:13px}
+
+.mine-hero{background:var(--grad-hero);color:#fff;padding:18px 16px 26px;display:flex;gap:12px;align-items:center}
+.avatar{width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;
+  align-items:center;justify-content:center;flex:0 0 auto;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.mine-hero .nm{font-size:17px;font-weight:700}
+.mine-hero .sb{font-size:12px;opacity:.85;margin-top:2px}
+.entry{display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:1px solid var(--line);cursor:pointer}
+.entry:last-child{border-bottom:0}
+.entry .ic{width:32px;height:32px;border-radius:9px;background:var(--primary-soft);color:var(--primary);
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.entry .tx{flex:1;font-size:13.5px}
+.entry .arw{color:#C3CAD8}
+.note{margin:12px;background:#FFF9EC;border:1px solid #F6E6C4;border-radius:12px;padding:11px 13px;
+  font-size:11.5px;color:#8A6A1F;line-height:1.7}
+
+.legend{max-width:430px;margin-top:18px;font-size:12px;color:#6B7688;line-height:1.8;text-align:center}
+.legend b{color:#3A4356}
+@media(max-width:430px){
+  body{padding:12px 0 20px}
+  .phone{border-radius:0;height:100vh;max-height:none;border:0;width:100%}
+  .masthead{padding:0 14px}
+}
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <h1>青创汇活动报名微信小程序</h1>
+  <p>网页演示版 · 完整复刻小程序 5 个页面的交互流程，点击底部标签与卡片即可体验</p>
+  <span class="badge-demo">数据存于浏览器本地，与云开发数据库相互独立</span>
+</div>
+
+<div class="phone">
+  <div class="statusbar" id="statusbar">
+    <span id="clock">9:41</span>
+    <span class="dots"><i></i><i></i><i></i><i></i><i></i></span>
+  </div>
+  <div id="viewport" class="viewport"></div>
+  <div class="tabbar" id="tabbar"></div>
+</div>
+
+<div class="legend">
+  演示数据可在「我的 → 重置演示数据」清空<br />
+  <b>移动端建议竖屏浏览</b>，桌面端为手机框架视图
+</div>
+
+<script>
+/* ============================================================
+   图标：统一 24 网格线性风格，与小程序 PNG 图标同源（无 Emoji）
+   ============================================================ */
+var P = {
+  home:'<path d="M3 10.6 12 3.2l9 7.4"/><path d="M5.6 9.4V20.2h12.8V9.4"/><path d="M9.6 20.2v-5.6h4.8v5.6"/>',
+  search:'<circle cx="10.8" cy="10.8" r="6.4"/><path d="M15.6 15.6 20.4 20.4"/>',
+  clock:'<circle cx="12" cy="12" r="8.4"/><path d="M12 6.9V12l3.6 2.1"/>',
+  pin:'<path d="M12 20.8s6.8-6 6.8-10.6a6.8 6.8 0 1 0-13.6 0C5.2 14.8 12 20.8 12 20.8z"/><circle cx="12" cy="10.2" r="2.5"/>',
+  users:'<circle cx="9.2" cy="8.6" r="3.5"/><path d="M2.8 20.2c0-3.5 2.9-5.5 6.4-5.5s6.4 2 6.4 5.5"/><path d="M15.9 5.3a3.5 3.5 0 0 1 0 6.6"/><path d="M17.4 14.7c2.3.6 3.8 2.3 3.8 5.1"/>',
+  check:'<path d="M4.8 12.4 9.6 17.2 19.2 6.8"/>',
+  back:'<path d="M14.8 5.2 8 12l6.8 6.8"/>',
+  arrow:'<path d="M9 5.2 15.8 12 9 18.8"/>',
+  clipboard:'<path d="M6.2 4.6h11.6v15.8H6.2z" rx="2"/><path d="M9.2 4.6V3.1h5.6v1.5"/><path d="M9 10.6h6"/><path d="M9 14.6h6"/>',
+  user:'<circle cx="12" cy="8.2" r="4"/><path d="M4.6 20.4c0-3.9 3.3-5.9 7.4-5.9s7.4 2 7.4 5.9"/>',
+  plus:'<path d="M12 5v14"/><path d="M5 12h14"/>',
+  close:'<path d="M6.2 6.2 17.8 17.8"/><path d="M17.8 6.2 6.2 17.8"/>',
+  ticket:'<path d="M3.6 8.2V6.4h16.8v1.8a2.6 2.6 0 0 0 0 7.6v1.8H3.6v-1.8a2.6 2.6 0 0 0 0-7.6z"/><path d="M9.6 6.6v10.8" stroke-dasharray="2.4 2.4"/>',
+  qrcode:'<path d="M4.2 4.2h5.4v5.4H4.2z"/><path d="M14.4 4.2h5.4v5.4h-5.4z"/><path d="M4.2 14.4h5.4v5.4H4.2z"/><path d="M14.4 14.4h2.6v2.6h-2.6z"/><path d="M19.2 14.4h.6v.6h-.6z"/><path d="M17.2 17.2h2.6v2.6h-2.6z"/>',
+  doc:'<path d="M6.4 3.2h7.2L18 7.6v13.2H6.4z"/><path d="M13.4 3.4v4.4h4.4"/>',
+  filter:'<path d="M4.2 7.2h15.6"/><path d="M7 12h10"/><path d="M9.8 16.8h4.4"/>',
+  refresh:'<path d="M19.8 11.2A8 8 0 0 0 6.3 7.4L4 9.4"/><path d="M4.2 13.2a8 8 0 0 0 13.5 3.8L20 15"/><path d="M4 4.6v4.8h4.8"/><path d="M20 19.8v-4.8h-4.8"/>',
+  bell:'<path d="M18.2 15.4V10.6a6.2 6.2 0 1 0-12.4 0v4.8L4 18.2h16z"/><path d="M9.8 21a2.4 2.4 0 0 0 4.4 0"/>',
+  star:'<path d="M12 3.6 14.7 9.2l6.1.9-4.4 4.3 1 6.1L12 17.6l-5.4 2.9 1-6.1L3.2 10l6.1-.9z"/>'
+};
+function icon(n,s,c,sw){
+  s=s||20;c=c||'currentColor';sw=sw||1.8;
+  return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="'+c+
+    '" stroke-width="'+sw+'" stroke-linecap="round" stroke-linejoin="round">'+(P[n]||'')+'</svg>';
+}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(m){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];});}
+function nl(s){return esc(s).replace(/\n/g,'<br>');}
+
+/* ============================================================
+   模拟数据（与云函数 admin/initDemo 的示例活动一致）
+   ============================================================ */
+var DAY=86400000, HOUR=3600000;
+function seedActivities(){
+  var now=Date.now();
+  return [
+    { id:'a1', title:'主论坛 · 大模型与未来产业', subtitle:'院士领衔，共话通用人工智能时代的人才机遇',
+      startAt:now+30*DAY, endAt:now+30*DAY+9*HOUR,
+      city:'上海', venue:'上海国际会议中心', address:'浦东新区滨江大道2727号',
+      mode:'offline', audience:'顶尖高校本科生与研究生', organizer:'青年科创人才发展中心',
+      quota:300, baseEnrolled:186, fee:0, enrollOpen:true, hue:0,
+      tags:['峰会','主论坛','人工智能'],
+      desc:'汇聚院士学者与头部企业科学家，围绕大模型技术演进、产业落地与青年人才培养展开深度研讨。\n参会收获：\n1. 与行业顶尖学者面对面交流\n2. 获取峰会专属学习资料包\n3. 优秀学子可进入企业人才库',
+      agenda:[
+        {time:'09:00',title:'签到入场',desc:'凭签到码入场，领取会议资料'},
+        {time:'09:30',title:'开幕致辞',desc:'主办方致辞'},
+        {time:'10:00',title:'主旨演讲：大模型技术趋势',desc:'特邀院士'},
+        {time:'14:00',title:'圆桌对话：青年人才与产业未来',desc:'企业科学家 × 高校学者'},
+        {time:'17:00',title:'自由交流',desc:'人才对接与合影'}],
+      speakers:[
+        {name:'林远航',title:'中国科学院院士 · 计算机体系结构'},
+        {name:'陈曦',title:'头部大模型企业首席科学家'},
+        {name:'苏黎',title:'某顶尖高校教授 · 博士生导师'}] },
+    { id:'a2', title:'分论坛 · 集成电路与硬科技', subtitle:'从器件前沿到国产化生态',
+      startAt:now+31*DAY, endAt:now+31*DAY+7*HOUR,
+      city:'上海', venue:'上海国际会议中心 3F 珠海厅', address:'',
+      mode:'offline', audience:'微电子、物理、材料相关专业学生', organizer:'青年科创人才发展中心',
+      quota:120, baseEnrolled:120, fee:0, enrollOpen:true, hue:1,
+      tags:['分论坛','集成电路','硬科技'],
+      desc:'聚焦芯片设计与先进制造，邀请产业一线专家分享技术路线与职业成长路径。',
+      agenda:[
+        {time:'13:30',title:'签到入场',desc:''},
+        {time:'14:00',title:'主题报告：先进制程进展',desc:'晶圆厂技术总监'},
+        {time:'16:00',title:'学生海报展示',desc:'优秀课题评选'}],
+      speakers:[
+        {name:'顾清川',title:'晶圆代工企业技术总监'},
+        {name:'何昕然',title:'EDA 独角兽公司研发副总裁'}] },
+    { id:'a3', title:'线上公开课 · 科研入门与论文写作', subtitle:'峰会预热场，面向全国高校直播',
+      startAt:now+10*DAY, endAt:now+10*DAY+2*HOUR,
+      city:'线上', venue:'峰会直播间', address:'',
+      mode:'online', audience:'全体在校学生', organizer:'青年科创人才发展中心',
+      quota:1000, baseEnrolled:642, fee:0, enrollOpen:true, hue:2,
+      tags:['线上','科研入门'],
+      desc:'峰会前的线上预热公开课，手把手讲解科研选题、文献阅读与论文写作方法论。',
+      agenda:[
+        {time:'19:00',title:'科研选题方法',desc:''},
+        {time:'19:45',title:'论文写作实战',desc:''},
+        {time:'20:30',title:'答疑互动',desc:''}],
+      speakers:[{name:'沈亦舟',title:'国家优秀青年科学基金获得者'}] },
+    { id:'a4', title:'往届回顾 · 2025 青年科创峰会', subtitle:'已于 2025 年 12 月圆满举办',
+      startAt:now-320*DAY, endAt:now-320*DAY+8*HOUR,
+      city:'上海', venue:'上海国际会议中心', address:'',
+      mode:'offline', audience:'顶尖高校本科生与研究生', organizer:'青年科创人才发展中心',
+      quota:260, baseEnrolled:260, fee:0, enrollOpen:true, hue:3,
+      tags:['往届','回顾'],
+      desc:'2025 届峰会吸引全国 60 余所高校学子参与，本条为历史数据示例。',
+      agenda:[], speakers:[] }
+  ];
+}
+var GRADS=['linear-gradient(135deg,#2E6BF6 0%,#1B3FD6 58%,#122B85 100%)',
+           'linear-gradient(135deg,#0E9F6E 0%,#067A52 60%,#04543A 100%)',
+           'linear-gradient(135deg,#7C5CF0 0%,#5B34D6 60%,#3C1FA0 100%)',
+           'linear-gradient(135deg,#54606F 0%,#39434F 60%,#232A33 100%)'];
+var DEGREES=['本科','硕士','博士','其他'];
+var DIRECTIONS=['人工智能','集成电路','生命科学','新能源与双碳','金融科技','智能建造'];
+
+/* ---------- 本地存储 ---------- */
+var LS_REG='summit_web_regs', LS_PRO='summit_web_profile', LS_LOG='summit_web_logged';
+function load(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+var state={
+  tab:'home', page:'home', activityId:null,
+  kw:'', filter:'all', regFilter:'all',
+  regs:load(LS_REG,null),
+  profile:load(LS_PRO,null),
+  logged:load(LS_LOG,false)
+};
+if(!state.regs){
+  state.regs=[{
+    id:'r_demo', activityId:'a1', activityTitle:'主论坛 · 大模型与未来产业',
+    name:'示例同学', mobile:'13800000000', school:'示例大学', major:'计算机科学与技术',
+    degree:'硕士', direction:'人工智能', email:'', stay:false, remark:'',
+    status:'approved', createdAt:Date.now()-2*DAY,
+    code:'SUMMIT-2601-0001', checkin:'804213'
+  }];
+  save(LS_REG,state.regs);
+}
+
+/* ---------- 派生计算 ---------- */
+function acts(){ return seedActivities().map(function(a){
+  var n=Date.now();
+  var st = !a.enrollOpen ? 'closed'
+        : n>a.endAt ? 'ended'
+        : (n>=a.startAt && n<=a.endAt) ? 'ongoing'
+        : (enrolledOf(a.id)>=a.quota) ? 'full' : 'enrolling';
+  a._st=st;
+  a.enrolled=enrolledOf(a.id);
+  a.percent=Math.min(100,Math.round(a.enrolled/a.quota*100));
+  a.statusText={enrolling:'报名中',full:'名额已满',ongoing:'进行中',ended:'已结束',closed:'未开放'}[st];
+  a.statusCls={enrolling:'tag-p',full:'tag-a',ongoing:'tag-g',ended:'tag-n',closed:'tag-n'}[st];
+  a.startText=fmtDT(a.startAt); a.endText=fmtDT(a.endAt);
+  a.free=!a.fee;
+  return a;
+});}
+function enrolledOf(id){
+  var base=(seedActivities().filter(function(a){return a.id===id;})[0]||{}).baseEnrolled||0;
+  var mine=state.regs.filter(function(r){return r.activityId===id && r.status!=='cancelled';}).length;
+  return base+mine;
+}
+function byId(id){return acts().filter(function(a){return a.id===id;})[0];}
+function p2(n){return n<10?'0'+n:''+n;}
+function fmtDT(ts){var d=new Date(ts);
+  return d.getFullYear()+'.'+p2(d.getMonth()+1)+'.'+p2(d.getDate())+' '+p2(d.getHours())+':'+p2(d.getMinutes());}
+function fmtD(ts){var d=new Date(ts);return d.getFullYear()+'.'+p2(d.getMonth()+1)+'.'+p2(d.getDate());}
+function fmtT(ts){var d=new Date(ts);return p2(d.getHours())+':'+p2(d.getMinutes());}
+function regMeta(s){return {pending:{t:'待审核',c:'tag-a'},approved:{t:'已通过',c:'tag-g'},
+  cancelled:{t:'已取消',c:'tag-n'},rejected:{t:'未通过',c:'tag-r'}}[s]||{t:'待审核',c:'tag-a'};}
+
+/* ============================================================
+   渲染
+   ============================================================ */
+var vp=document.getElementById('viewport'), tb=document.getElementById('tabbar'),
+    sb=document.getElementById('statusbar');
+
+function render(){
+  renderTabbar();
+  if(state.page==='home'){ vp.className='viewport gray'; sb.className='statusbar'; renderHome(); }
+  else if(state.page==='detail'){ vp.className='viewport gray'; sb.className='statusbar'; renderDetail(); }
+  else if(state.page==='enroll'){ vp.className='viewport gray'; sb.className='statusbar'; renderEnroll(); }
+  else if(state.page==='records'){ vp.className='viewport gray'; sb.className='statusbar'; renderRecords(); }
+  else { vp.className='viewport gray'; sb.className='statusbar'; renderMine(); }
+  vp.scrollTop=0;
+}
+function renderTabbar(){
+  var isTab=(state.page==='home'||state.page==='records'||state.page==='mine');
+  tb.className='tabbar'+(isTab?'':' hidden');
+  if(!isTab){tb.innerHTML='';return;}
+  var items=[{k:'home',t:'首页',i:'home'},{k:'records',t:'报名记录',i:'clipboard'},{k:'mine',t:'我的',i:'user'}];
+  tb.innerHTML=items.map(function(it){
+    var on=(state.tab===it.k);
+    return '<button class="'+(on?'on':'')+'" data-tab="'+it.k+'">'+
+      icon(it.i,23,on?'#2456E8':'#9AA4B8',1.8)+'<span>'+it.t+'</span></button>';
+  }).join('');
+  Array.prototype.forEach.call(tb.querySelectorAll('button'),function(b){
+    b.onclick=function(){ state.tab=b.dataset.tab; state.page=b.dataset.tab; render(); };
+  });
+}
+function nav(title,back,act){
+  var h='<div class="navbar'+(back==='ghost'?' transparent':'')+'">';
+  if(back) h+='<button class="back" id="btnBack">'+icon('back',22,back==='ghost'?'#fff':'#0F172A',2)+'</button>';
+  h+='<span>'+esc(title)+'</span>';
+  if(act) h+='<button class="nav-act" id="btnNavAct">'+esc(act)+'</button>';
+  return h+'</div>';
+}
+function bindBack(){var b=document.getElementById('btnBack');
+  if(b) b.onclick=function(){ state.page=state.tab; render(); };}
+
+/* ---------- 首页 ---------- */
+function renderHome(){
+  var all=acts();
+  var total=all.length, enrolled=all.reduce(function(s,a){return s+a.enrolled;},0),
+      open=all.filter(function(a){return a._st==='enrolling';}).length;
+  var list=all.filter(function(a){
+    var okKw=!state.kw||(a.title+a.subtitle+a.city+a.venue).indexOf(state.kw)>=0;
+    var okF=state.filter==='all'||a._st===state.filter;
+    return okKw&&okF;
+  });
+  var filters=[['all','全部'],['enrolling','报名中'],['ongoing','进行中'],['ended','已结束']];
+  var h='';
+  h+=nav('青创汇',false);
+  h+='<div class="page">';
+  h+='<div class="hero"><div class="en">YOUTH SCI-TECH SUMMIT 2026</div>'+
+     '<h2>2026 青年科创峰会</h2>'+
+     '<div class="slogan">面向顶尖高校本科生与研究生的年度科创盛会</div></div>';
+  h+='<div class="stats"><div><b>'+total+'</b><span>活动场次</span></div>'+
+     '<div><b>'+enrolled+'</b><span>累计报名</span></div>'+
+     '<div><b>'+open+'</b><span>正在报名</span></div></div>';
+  h+='<div class="searchbar">'+icon('search',17,'#94A3B8')+
+     '<input id="kw" placeholder="搜索活动名称 / 城市 / 场馆" value="'+esc(state.kw)+'" /></div>';
+  h+='<div class="chips">'+filters.map(function(f){
+      return '<button class="chip'+(state.filter===f[0]?' on':'')+'" data-f="'+f[0]+'">'+f[1]+'</button>';
+     }).join('')+'</div>';
+  if(!list.length){
+    h+='<div class="empty"><div class="ico">'+icon('search',26,'#B7C0D0')+'</div><p>没有符合条件的活动</p></div>';
+  }else{
+    h+=list.map(cardHtml).join('');
+  }
+  h+='</div>';
+  vp.innerHTML=h;
+  var kw=document.getElementById('kw');
+  if(kw){ kw.oninput=function(e){ state.kw=e.target.value; };
+          kw.onkeydown=function(e){ if(e.key==='Enter') render(); }; }
+  Array.prototype.forEach.call(vp.querySelectorAll('.chip'),function(c){
+    c.onclick=function(){ state.filter=c.dataset.f; render(); };
+  });
+  Array.prototype.forEach.call(vp.querySelectorAll('.acard'),function(c){
+    c.onclick=function(){ state.activityId=c.dataset.id; state.page='detail'; render(); };
+  });
+}
+function cardHtml(a){
+  var h='<div class="acard" data-id="'+a.id+'">';
+  h+='<div class="cover" style="background:'+GRADS[a.hue]+'"><div class="grid"></div>'+
+     '<div class="cov-tag"><span class="tag" style="background:rgba(255,255,255,.22);color:#fff">'+esc(a.statusText)+'</span></div>'+
+     '<div><div class="cov-title">'+esc(a.title)+'</div>'+
+     '<div class="cov-sub">'+esc(a.city)+(a.mode==='online'?' · 线上':' · 线下')+' · '+fmtD(a.startAt)+'</div></div></div>';
+  h+='<div class="body"><div class="between"><h3 style="margin:0;font-size:15px">'+esc(a.title)+'</h3>'+
+     '<span class="tag '+a.statusCls+'">'+esc(a.statusText)+'</span></div>';
+  h+='<div class="sub">'+esc(a.subtitle)+'</div>';
+  h+='<div class="meta">'+
+     '<div class="row">'+icon('clock',14,'#94A3B8')+'<span>'+esc(a.startText)+'</span></div>'+
+     '<div class="row">'+icon('pin',14,'#94A3B8')+'<span>'+esc(a.venue)+'</span></div>'+
+     '<div class="row">'+icon('users',14,'#94A3B8')+'<span>已报名 '+a.enrolled+' / '+a.quota+' 人</span></div></div>';
+  h+='<div class="bar"><i style="width:'+a.percent+'%"></i></div>';
+  h+='<div class="tags">'+a.tags.map(function(t){return '<span class="tag tag-line">'+esc(t)+'</span>';}).join('')+
+     '<span class="tag '+(a.free?'tag-g':'tag-a')+'" style="margin-left:auto">'+(a.free?'免费':'¥'+a.fee)+'</span></div>';
+  h+='</div></div>';
+  return h;
+}
+
+/* ---------- 详情 ---------- */
+function renderDetail(){
+  var a=byId(state.activityId); if(!a){state.page='home';render();return;}
+  var canEnroll=(a._st==='enrolling');
+  var h=nav('活动详情',true);
+  h+='<div class="page" style="padding-bottom:0">';
+  h+='<div class="d-hero" style="background:'+GRADS[a.hue]+'"><div class="grid" style="position:absolute;inset:0;opacity:.18;'+
+     'background-image:linear-gradient(rgba(255,255,255,.6) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.6) 1px,transparent 1px);'+
+     'background-size:26px 26px"></div>'+
+     '<div class="row" style="position:relative;gap:6px"><span class="tag" style="background:rgba(255,255,255,.22);color:#fff">'+esc(a.statusText)+'</span>'+
+     '<span class="tag" style="background:rgba(255,255,255,.16);color:#fff">'+(a.mode==='online'?'线上活动':'线下活动')+'</span></div>'+
+     '<h2 style="position:relative;margin-top:8px">'+esc(a.title)+'</h2>'+
+     '<div class="row" style="position:relative">'+icon('pin',14,'#fff')+'<span>'+esc(a.city)+' · '+esc(a.venue)+'</span></div></div>';
+  h+='<div class="card pad">'+
+     infoRow('活动时间',fmtDT(a.startAt)+' 至 '+fmtT(a.endAt))+
+     infoRow('活动地点',a.city+' '+a.venue+(a.address?('（'+a.address+'）'):''))+
+     infoRow('参与对象',a.audience)+
+     infoRow('主办单位',a.organizer)+
+     infoRow('报名名额',a.enrolled+' / '+a.quota+' 人'+(a.percent>=100?'（已满）':''))+
+     infoRow('参与费用',a.free?'免费':'¥'+a.fee)+
+     '</div>';
+  h+='<div class="card pad"><div class="sec-title"><i class="bar"></i>活动介绍</div>'+
+     '<div class="desc">'+nl(a.desc)+'</div></div>';
+  if(a.agenda&&a.agenda.length){
+    h+='<div class="card pad"><div class="sec-title"><i class="bar"></i>活动议程</div><div class="timeline">'+
+       a.agenda.map(function(g){
+         return '<div class="tl-item"><div class="tl-time">'+esc(g.time)+'</div>'+
+           '<div class="tl-title">'+esc(g.title)+'</div>'+
+           (g.desc?'<div class="tl-desc">'+esc(g.desc)+'</div>':'')+'</div>';
+       }).join('')+'</div></div>';
+  }
+  if(a.speakers&&a.speakers.length){
+    h+='<div class="card pad"><div class="sec-title"><i class="bar"></i>分享嘉宾</div>'+
+       a.speakers.map(function(s){
+         return '<div class="sp"><div class="av">'+esc(s.name.slice(0,1))+'</div>'+
+           '<div><div class="n">'+esc(s.name)+'</div><div class="t">'+esc(s.title)+'</div></div></div>';
+       }).join('')+'</div>';
+  }
+  h+='<div class="card pad"><div class="sec-title"><i class="bar"></i>报名须知</div>'+
+     '<div class="desc">1. 请填写真实信息，报名审核结果将以短信通知；\n'+
+     '2. 报名成功后可在「报名记录」查看签到码，现场凭码入场；\n'+
+     '3. 如需取消，请在活动开始前于「报名记录」中操作。</div></div>';
+  h+='</div>';
+  vp.innerHTML=h;
+  bindBack();
+  var fb=document.createElement('div');
+  fb.className='footbar';
+  fb.innerHTML='<div class="price"><b>'+(a.free?'免费':'¥'+a.fee)+'</b><br>'+(a.free?'':'\n')+
+    '<span style="font-size:11px">剩余 '+Math.max(0,a.quota-a.enrolled)+' 位</span></div>'+
+    '<button class="btn'+(canEnroll?'':' disabled')+'" id="btnEnroll" '+(canEnroll?'':'disabled')+'>'+
+    (canEnroll?'立即报名':({full:'名额已满',ongoing:'活动进行中',ended:'活动已结束',closed:'报名未开放'}[a._st]))+
+    '</button>';
+  vp.parentNode.insertBefore(fb,vp.nextSibling);
+  var old=vp.parentNode.querySelectorAll('.footbar');
+  Array.prototype.forEach.call(old,function(o,i){ if(o!==fb) o.remove(); });
+  var be=document.getElementById('btnEnroll');
+  if(be&&canEnroll) be.onclick=function(){ state.page='enroll'; render(); };
+}
+function infoRow(k,v){
+  return '<div class="info-row"><div class="k">'+esc(k)+'</div><div class="v">'+esc(v)+'</div></div>';
+}
+
+/* ---------- 报名 ---------- */
+function renderEnroll(){
+  var a=byId(state.activityId); if(!a){state.page='home';render();return;}
+  var mine=state.regs.filter(function(r){return r.activityId===a.id && r.status!=='cancelled';})[0];
+  if(mine){ renderEnrollDone(a,mine); return; }
+  var h=nav('在线报名',true);
+  h+='<div class="page">';
+  h+='<div class="card pad" style="margin-bottom:0">'+
+     '<div class="row" style="gap:10px">'+
+     '<div style="width:52px;height:52px;border-radius:10px;background:'+GRADS[a.hue]+';flex:0 0 auto"></div>'+
+     '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:700">'+esc(a.title)+'</div>'+
+     '<div class="small muted" style="margin-top:2px">'+esc(a.startText)+' · '+esc(a.venue)+'</div></div></div></div>';
+  h+='<div class="card pad" style="margin-top:10px"><div class="sec-title"><i class="bar"></i>报名信息</div>';
+  h+=field('姓名','name','请输入真实姓名',true);
+  h+=field('手机号','mobile','用于接收审核通知',true);
+  h+=field('所在学校','school','请输入所在学校',true);
+  h+=field('学院 / 专业','major','如：计算机科学与技术',true);
+  h+='<div class="field"><div class="lb">学历<em>*</em></div><div class="picker" id="degreePick">'+
+     DEGREES.map(function(d){return '<button data-v="'+d+'">'+d+'</button>';}).join('')+'</div></div>';
+  h+='<div class="field"><div class="lb">参会方向<em>*</em></div><div class="picker" id="dirPick">'+
+     DIRECTIONS.map(function(d){return '<button data-v="'+d+'">'+d+'</button>';}).join('')+'</div></div>';
+  h+=field('邮箱','email','选填，用于接收参会材料',false);
+  h+='<div class="field"><div class="switch"><span>需要会务协助安排住宿</span>'+
+     '<div class="toggle" id="stayToggle"><i></i></div></div></div>';
+  h+='<div class="field"><div class="lb">备注</div>'+
+     '<textarea id="f_remark" placeholder="选填，如需携带随行人员、饮食禁忌等可在此说明"></textarea></div>';
+  h+='<div id="errBox"></div>';
+  h+='<button class="btn block" style="margin-top:16px" id="btnSubmit">'+icon('check',17,'#fff')+'提交报名</button>';
+  h+='<div class="small muted" style="text-align:center;margin-top:10px">提交即表示同意《活动报名须知》</div>';
+  h+='</div></div>';
+  vp.innerHTML=h;
+  bindBack();
+  var rm=vp.parentNode.querySelector('.footbar'); if(rm) rm.remove();
+
+  var deg=null,dir=null,stay=false;
+  var dp=document.getElementById('degreePick');
+  Array.prototype.forEach.call(dp.querySelectorAll('button'),function(b){
+    b.onclick=function(){
+      deg=b.dataset.v;
+      Array.prototype.forEach.call(dp.querySelectorAll('button'),function(x){x.className='';});
+      b.className='on';
+    };
+  });
+  var rp=document.getElementById('dirPick');
+  Array.prototype.forEach.call(rp.querySelectorAll('button'),function(b){
+    b.onclick=function(){
+      dir=b.dataset.v;
+      Array.prototype.forEach.call(rp.querySelectorAll('button'),function(x){x.className='';});
+      b.className='on';
+    };
+  });
+  var st=document.getElementById('stayToggle');
+  st.onclick=function(){ stay=!stay; st.className='toggle'+(stay?' on':''); };
+
+  document.getElementById('btnSubmit').onclick=function(){
+    var g=function(id){var e=document.getElementById(id);return e?e.value.trim():'';};
+    var name=g('f_name'),mobile=g('f_mobile'),school=g('f_school'),major=g('f_major'),
+        email=g('f_email'),remark=g('f_remark');
+    var err='';
+    if(!name) err='请填写姓名';
+    else if(!/^1\d{10}$/.test(mobile)) err='请填写正确的 11 位手机号';
+    else if(!school) err='请填写所在学校';
+    else if(!major) err='请填写学院 / 专业';
+    else if(!deg) err='请选择学历';
+    else if(!dir) err='请选择参会方向';
+    else if(email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) err='邮箱格式不正确';
+    if(err){ document.getElementById('errBox').innerHTML='<div class="err">'+esc(err)+'</div>';
+             vp.scrollTop=vp.scrollHeight; return; }
+    var now=new Date();
+    var reg={
+      id:'r'+Date.now(), activityId:a.id, activityTitle:a.title,
+      name:name,mobile:mobile,school:school,major:major,degree:deg,direction:dir,
+      email:email,stay:stay,remark:remark,status:'pending',createdAt:Date.now(),
+      code:'SUMMIT-'+p2(now.getMonth()+1)+p2(now.getDate())+'-'+String(Math.floor(Math.random()*9000)+1000),
+      checkin:String(Math.floor(Math.random()*900000)+100000)
+    };
+    state.regs.unshift(reg); save(LS_REG,state.regs);
+    renderEnrollDone(a,reg);
+  };
+}
+function field(label,key,ph,req){
+  return '<div class="field"><div class="lb">'+esc(label)+(req?'<em>*</em>':'')+'</div>'+
+    '<input id="f_'+key+'" placeholder="'+esc(ph)+'"'+(key==='mobile'?' type="tel" maxlength="11"':'')+' /></div>';
+}
+function renderEnrollDone(a,reg){
+  var m=regMeta(reg.status);
+  var h=nav('报名成功',true);
+  h+='<div class="page">';
+  h+='<div class="card"><div class="okbox"><div class="ok-ico">'+icon('check',30,'#16A34A',2.2)+'</div>'+
+     '<h3>报名提交成功</h3><p>审核结果将通过短信通知，请留意手机</p></div>'+
+     '<div class="codebox"><div class="k">签 到 码</div><div class="v">'+esc(reg.checkin)+'</div>'+
+     '<div class="n">'+esc(a.title)+'</div>'+
+     '<div class="small muted" style="margin-top:4px">'+esc(a.startText)+' · '+esc(a.venue)+'</div></div>';
+  h+='<div class="pad">'+
+     infoRow('报名编号',reg.code)+
+     infoRow('当前状态','<span class="tag '+m.c+'">'+m.t+'</span>')+
+     infoRow('姓名',reg.name)+
+     infoRow('手机号',reg.mobile)+
+     infoRow('学校',reg.school)+
+     infoRow('学院 / 专业',reg.major)+
+     infoRow('学历',reg.degree)+
+     infoRow('参会方向',reg.direction)+
+     (reg.email?infoRow('邮箱',reg.email):'')+
+     infoRow('住宿协助',reg.stay?'需要':'不需要')+
+     (reg.remark?infoRow('备注',reg.remark):'')+
+     '</div></div>';
+  h+='<div style="padding:0 12px"><button class="btn ghost block" id="btnToRecords">'+
+     icon('clipboard',17,'#2456E8')+'查看我的报名记录</button></div>';
+  h+='</div>';
+  vp.innerHTML=h;
+  var rm=vp.parentNode.querySelector('.footbar'); if(rm) rm.remove();
+  document.getElementById('btnBack').onclick=function(){ state.page='home'; state.tab='home'; render(); };
+  document.getElementById('btnToRecords').onclick=function(){ state.page='records'; state.tab='records'; render(); };
+}
+
+/* ---------- 报名记录 ---------- */
+function renderRecords(){
+  var all=state.regs.slice().sort(function(a,b){return b.createdAt-a.createdAt;});
+  var list=state.regFilter==='all'?all:all.filter(function(r){return r.status===state.regFilter;});
+  var segs=[['all','全部'],['pending','待审核'],['approved','已通过'],['cancelled','已取消']];
+  var h=nav('报名记录',false);
+  h+='<div class="page">';
+  h+='<div class="seg">'+segs.map(function(s){
+      return '<button class="'+(state.regFilter===s[0]?'on':'')+'" data-s="'+s[0]+'">'+s[1]+'</button>';
+     }).join('')+'</div>';
+  if(!list.length){
+    h+='<div class="empty"><div class="ico">'+icon('clipboard',26,'#B7C0D0')+'</div>'+
+       '<p>暂无报名记录</p><div class="small" style="margin-top:6px">去首页挑一场活动报名吧</div></div>';
+  }else{
+    h+=list.map(function(r){
+      var m=regMeta(r.status);
+      var s='<div class="rcard" data-id="'+r.id+'">';
+      s+='<div class="between"><div style="min-width:0"><h3>'+esc(r.activityTitle)+'</h3>'+
+         '<div class="small muted">'+esc(r.code)+' · '+fmtDT(r.createdAt)+'</div></div>'+
+         '<span class="tag '+m.c+'">'+m.t+'</span></div>';
+      if(r.status!=='cancelled'){
+        s+='<div style="margin-top:10px;background:var(--primary-soft);border-radius:10px;padding:10px;'+
+           'display:flex;align-items:center;justify-content:space-between">'+
+           '<div class="row" style="gap:8px">'+icon('qrcode',18,'#2456E8')+
+           '<div><div class="small" style="color:var(--primary);font-weight:600">签到码</div>'+
+           '<div style="font-size:17px;font-weight:800;letter-spacing:2px;color:var(--primary-deep)">'+esc(r.checkin)+'</div></div></div>'+
+           '<span class="tag tag-p">凭码入场</span></div>';
+      }
+      s+='<div class="meta" style="margin-top:9px">'+
+         '<div class="row">'+icon('user',14,'#94A3B8')+'<span>'+esc(r.name)+' · '+esc(r.school)+'</span></div>'+
+         '<div class="row">'+icon('star',14,'#94A3B8')+'<span>'+esc(r.degree)+' · '+esc(r.direction)+'</span></div>'+
+         '<div class="row">'+icon('clock',14,'#94A3B8')+'<span>'+esc(r.major)+'</span></div></div>';
+      if(r.status!=='cancelled'){
+        s+='<div style="text-align:right;margin-top:10px">'+
+           '<button class="btn ghost" style="padding:7px 14px;font-size:12.5px" data-cancel="'+r.id+'">取消报名</button></div>';
+      }
+      return s+'</div>';
+    }).join('');
+  }
+  h+='</div>';
+  vp.innerHTML=h;
+  var rm=vp.parentNode.querySelector('.footbar'); if(rm) rm.remove();
+  Array.prototype.forEach.call(vp.querySelectorAll('.seg button'),function(b){
+    b.onclick=function(){ state.regFilter=b.dataset.s; render(); };
+  });
+  Array.prototype.forEach.call(vp.querySelectorAll('[data-cancel]'),function(b){
+    b.onclick=function(){
+      var id=b.dataset.cancel;
+      state.regs.forEach(function(r){ if(r.id===id) r.status='cancelled'; });
+      save(LS_REG,state.regs);
+      render();
+    };
+  });
+}
+
+/* ---------- 我的 ---------- */
+function renderMine(){
+  var p=state.profile||{};
+  var h=nav('我的',false);
+  h+='<div class="page" style="padding-bottom:0">';
+  h+='<div class="mine-hero"><div class="avatar">'+
+     (state.logged?icon('user',30,'#fff',1.8):icon('user',30,'rgba(255,255,255,.7)',1.6))+'</div>'+
+     '<div style="flex:1;min-width:0">'+
+     (state.logged
+       ? '<div class="nm">'+esc(p.nick||'微信用户')+'</div><div class="sb">'+esc(p.school||'')+'</div>'
+       : '<div class="nm" style="font-size:15px">未登录</div>'+
+         '<div class="sb">授权后可同步头像昵称与报名档案</div>')+
+     '</div>'+
+     (state.logged?'':'<button class="btn" style="padding:8px 14px;font-size:13px;box-shadow:none" id="btnAuth">授权登录</button>')+
+     '</div>';
+  h+='<div class="card" style="margin-top:-14px;position:relative;z-index:2">';
+  h+=entry('clipboard','我的报名','查看全部报名记录与签到码','records');
+  h+=entry('plus','发布活动','创建活动并上传封面至云存储','publish');
+  h+=entry('bell','审核通知','报名审核结果提醒','notify');
+  h+='</div>';
+  h+='<div class="card" style="margin-top:10px">';
+  h+=entry('doc','活动报名须知','参会规则与取消政策','rule');
+  h+=entry('refresh','重置演示数据','清空本地报名记录与登录状态','reset');
+  h+='</div>';
+  h+='<div class="note">本页为<b>网页演示版</b>，登录与数据存储均在本地浏览器完成，'+
+     '不涉及真实的微信授权与云开发数据库。小程序正式版使用微信头像昵称填写能力 + 云存储。</div>';
+  h+='</div>';
+  vp.innerHTML=h;
+  var rm=vp.parentNode.querySelector('.footbar'); if(rm) rm.remove();
+  var ba=document.getElementById('btnAuth');
+  if(ba) ba.onclick=function(){
+    state.logged=true;
+    state.profile={nick:'科创小助手',school:'示例大学 · 计算机学院'};
+    save(LS_LOG,true); save(LS_PRO,state.profile);
+    render();
+  };
+  Array.prototype.forEach.call(vp.querySelectorAll('.entry'),function(e){
+    e.onclick=function(){
+      var k=e.dataset.k;
+      if(k==='records'){ state.tab='records'; state.page='records'; render(); }
+      else if(k==='publish'){ alert('演示版未包含发布页。小程序内可在「我的 → 发布活动」创建活动并上传封面至微信云存储。'); }
+      else if(k==='notify'){ alert('审核通知由云函数侧触发，演示版暂未接入。'); }
+      else if(k==='rule'){ alert('1. 请填写真实信息，审核结果以短信通知\n2. 凭签到码入场\n3. 活动开始前可在报名记录中取消'); }
+      else if(k==='reset'){
+        state.regs=[]; state.logged=false; state.profile=null;
+        save(LS_REG,state.regs); save(LS_LOG,false); save(LS_PRO,null);
+        render();
+      }
+    };
+  });
+}
+function entry(ic,t,s,k){
+  return '<div class="entry" data-k="'+k+'"><div class="ic">'+icon(ic,17,'#2456E8')+'</div>'+
+    '<div class="tx"><div>'+esc(t)+'</div><div class="small muted">'+esc(s)+'</div></div>'+
+    '<span class="arw">'+icon('arrow',16,'#C3CAD8')+'</span></div>';
+}
+
+/* ---------- 启动 ---------- */
+(function tick(){
+  var d=new Date();
+  document.getElementById('clock').textContent=d.getHours()+':'+p2(d.getMinutes());
+  setTimeout(tick,20000);
+})();
+render();
+</script>
+</body>
+</html>
