@@ -2,7 +2,7 @@
   "miniprogramRoot": "miniprogram/",
   "cloudfunctionRoot": "cloudfunctions/",
   "compileType": "miniprogram",
-  "appid": "touristappid",
+  "appid": "wxd807c78390526662",
   "projectname": "summit-signup",
   "libVersion": "3.8.12",
   "setting": {
